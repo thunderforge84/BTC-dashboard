@@ -684,6 +684,22 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
               <div class="mvrv-z" style="width:14%;background:#380d0d;color:#f87171;">SELL</div>
             </div>
             <div class="mvrv-lbls"><span>0</span><span>1.0</span><span>1.5</span><span>2.0</span><span>2.5</span><span>3.5</span><span>5+</span></div>
+
+            <!-- MVRV Full Cycle Framework -->
+            <div style="margin-top:12px;font-size:8px;color:var(--d2);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">MVRV Full Cycle Framework — buy & sell levels</div>
+            <table class="tbl" id="mvrvFramework">
+              <thead><tr><th>MVRV Level</th><th>Approx BTC Price*</th><th>Signal</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td style="color:var(--g);font-weight:600;">&lt; 1.0</td><td id="px-10" style="color:var(--g);font-weight:600;">—</td><td><span class="bdg g">Strong Buy</span></td><td style="font-size:9px;color:var(--d1);">Full accumulation · historic cycle bottom zone</td></tr>
+                <tr style="background:rgba(39,174,96,0.04);"><td style="color:var(--g);font-weight:600;">1.0 – 1.5</td><td id="px-15" style="color:var(--g);font-weight:600;">—</td><td><span class="bdg g">Buy</span></td><td style="font-size:9px;color:var(--d1);">Accumulate · cheap relative to history</td></tr>
+                <tr><td style="color:var(--a);">1.5 – 2.5</td><td id="px-25" style="color:var(--a);">—</td><td><span class="bdg a">Hold</span></td><td style="font-size:9px;color:var(--d1);">Fair value · neither cheap nor expensive</td></tr>
+                <tr><td style="color:var(--a);">2.5 – 3.0</td><td id="px-30" style="color:var(--a);">—</td><td><span class="bdg a">Caution</span></td><td style="font-size:9px;color:var(--d1);">Start reducing · market paying premium</td></tr>
+                <tr><td style="color:var(--r);">3.0 – 3.5</td><td id="px-35" style="color:var(--r);">—</td><td><span class="bdg r">Reduce</span></td><td style="font-size:9px;color:var(--d1);">Take meaningful profit · cycle top approaching</td></tr>
+                <tr><td style="color:var(--r);font-weight:600;">&gt; 3.7</td><td id="px-37" style="color:var(--r);font-weight:600;">—</td><td><span class="bdg r">Sell Zone</span></td><td style="font-size:9px;color:var(--d1);">Historic cycle top territory · majority exit</td></tr>
+              </tbody>
+            </table>
+            <div style="font-size:8px;color:var(--d2);margin-top:5px;">* Price = MVRV level × current realized price ($<span id="rpForCalc">54,229</span>) · updates each dashboard refresh · each cycle peak MVRV is lower than the last (2017: 4.7 → 2021: 3.8 → 2025: ~3.4) — don't wait for 5.0</div>
+
             <div class="sep"></div>
             <div style="font-size:8px;color:var(--d2);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">Signal Scorecard</div>
             <table class="tbl">
@@ -1600,9 +1616,27 @@ function initCharts() {
   new Chart(document.getElementById('c-d12'), { type:'bar', data:{ labels:['< 0%','0–100%','100–300%','300–600%','>600%'], datasets:[{ data:[0,1,2,4,4], backgroundColor:['rgba(231,76,60,0.7)','rgba(230,126,34,0.5)','rgba(230,126,34,0.75)','rgba(39,174,96,0.65)','rgba(39,174,96,0.9)'], borderRadius:4 }] }, options:{ ...cfgBase, plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>c.parsed.y+' events'}} }, scales:{ ...cfgBase.scales, y:{ ticks:{color:tc,font:{family:FONT,size:9},stepSize:1}, grid:{color:gc}, border:{display:false} } } } });
 }
 
+// ═══ MVRV SELL LEVEL CALCULATOR ═══════════════════════════
+function updateMvrvLevels() {
+  const rpEl = document.getElementById('e-rp');
+  if(!rpEl) return;
+  const raw = rpEl.value.replace(/[^0-9.]/g,'');
+  const rp = parseFloat(raw);
+  if(isNaN(rp) || rp < 1000) return;
+  const fmt = v => '$' + Math.round(v).toLocaleString('en-US');
+  const el = id => document.getElementById(id);
+  if(el('px-10')) el('px-10').textContent = 'below ' + fmt(rp * 1.0);
+  if(el('px-15')) el('px-15').textContent = fmt(rp * 1.0) + ' – ' + fmt(rp * 1.5);
+  if(el('px-25')) el('px-25').textContent = fmt(rp * 1.5) + ' – ' + fmt(rp * 2.5);
+  if(el('px-30')) el('px-30').textContent = fmt(rp * 2.5) + ' – ' + fmt(rp * 3.0);
+  if(el('px-35')) el('px-35').textContent = fmt(rp * 3.0) + ' – ' + fmt(rp * 3.5);
+  if(el('px-37')) el('px-37').textContent = 'above ' + fmt(rp * 3.7);
+  if(el('rpForCalc')) el('rpForCalc').textContent = Math.round(rp).toLocaleString('en-US');
+}
+
 // ═══ INIT ═════════════════════════════════════════════════
 // Version stamp — bump this string every update to force-clear old saved metric values
-const FILE_VERSION = '2026-04-15-v4';
+const FILE_VERSION = '2026-04-15-v5';
 const SK_VER = 'btcv4_version';
 if(load(SK_VER, null) !== FILE_VERSION) {
   // New file version detected — clear old metric values and prev baseline
@@ -1616,6 +1650,7 @@ document.querySelectorAll('.e').forEach(e => e.readOnly=true);
 loadData();
 loadSecs();
 updateTrends();
+updateMvrvLevels();
 buildChecklist();
 // Restore last active tab
 const lastTab = load(SK_TABS, 'monitor');
