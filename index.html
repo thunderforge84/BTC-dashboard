@@ -1192,13 +1192,15 @@ const CHECKS = [
     ev: v => { const n = parseFloat(v.replace(/[^0-9.]/g,'')); if(isNaN(n)) return 0; if(n<=28) return 2; if(n<=32) return 1; return 0; } },
   { lbl:'LTH losses cool below $25M/day', sub:'Glassnode signal for exhaustion of selling pressure', src:'e-lthloss', tgt:'< $25M/day',
     ev: v => { const n = parseFloat(v.replace(/[^0-9.]/g,'')); if(isNaN(n)) return 0; if(n<25) return 2; if(n<75) return 1; return 0; } },
-  { lbl:'Price approaches LTH realized price (~$35k)', sub:'Network fair value floor — historically marks cycle bottoms', src:'e-rp', tgt:'Price ≈ realized',
+  { lbl:'Price approaches LTH realized price ($54,229)', sub:'Network fair value floor — price at 1.35× realized · historically marks cycle bottoms', src:'e-rp', tgt:'Price ≈ realized',
     ev: v => { if(!lastPx) return 0; const n = parseFloat(v.replace(/[^0-9.k]/gi,'').replace('k','000')); if(isNaN(n)) return 0; if(lastPx<=n*1.1) return 2; if(lastPx<=n*1.5) return 1; return 0; } },
   { lbl:'ETF inflows positive 3+ consecutive weeks', sub:'Sustained institutional re-accumulation confirmed', src:'e-etf7', tgt:'3+ weeks positive',
     ev: v => { if(v.trim().startsWith('+')) return 1; return 0; } },
   { lbl:'Oil / geopolitical risk recedes', sub:'Strait of Hormuz blockade ongoing · WTI $91, Brent $95–103 · volatile', src:null, tgt:'Oil < $85/bbl',
+    nowTxt: 'WTI ~$92',
     ev: () => 0 },
   { lbl:'BTC reclaims $80k+ on weekly close', sub:'Breaks above miner breakeven + MSTR cost cluster', src:null, tgt:'> $80k weekly',
+    nowTxt: null,
     ev: () => { if(!lastPx) return 0; if(lastPx>=80000) return 2; if(lastPx>=74000) return 1; return 0; } },
 ];
 
@@ -1208,7 +1210,14 @@ function buildChecklist() {
   let hits = 0, near = 0;
 
   CHECKS.forEach((c, i) => {
-    const nowVal = c.src ? (document.getElementById(c.src)?.value||'—') : (lastPx ? '$'+Math.round(lastPx).toLocaleString() : '—');
+    let nowVal;
+    if(c.src) {
+      nowVal = document.getElementById(c.src)?.value || '—';
+    } else if(c.nowTxt) {
+      nowVal = c.nowTxt;
+    } else {
+      nowVal = lastPx ? '$'+Math.round(lastPx).toLocaleString() : '—';
+    }
     const s = c.ev(nowVal);
     if(s===2) hits++; if(s>=1) near++;
 
