@@ -139,7 +139,6 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .foot-btn:hover { background: var(--bg3); color: var(--tx); }
 .foot-btn.pri { background: var(--bl); border-color: rgba(41,128,185,0.3); color: var(--b); }
 .foot-btn.pri:hover { background: var(--bd); }
-.foot-btn.edit-on { background: var(--ad); border-color: rgba(230,126,34,0.3); color: var(--a); }
 .foot-time { font-size: 8px; color: var(--d2); }
 
 /* ── MAIN ───────────────────────────────────────────────── */
@@ -172,24 +171,8 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 
 /* ── SHARED COMPONENTS ─────────────────────────────────── */
 
-/* Edit banner */
-.edit-banner {
-  display: none; background: var(--ad); border: 1px dashed rgba(230,126,34,0.3);
-  border-radius: 5px; padding: 7px 12px; font-size: 10px; color: var(--a);
-  margin-bottom: 14px; line-height: 1.6;
-}
-.edit-mode .edit-banner { display: block; }
-
-/* Editable inputs */
-.e {
-  background: transparent; border: none; color: inherit;
-  font-family: var(--mono); font-size: inherit; font-weight: inherit;
-  width: 100%; outline: none; cursor: default;
-}
-.edit-mode .e {
-  background: rgba(230,126,34,0.07); border: 1px dashed rgba(230,126,34,0.35);
-  border-radius: 3px; padding: 1px 4px; cursor: text; color: var(--a);
-}
+/* Edit banner hidden */
+.edit-banner { display: none; }
 
 /* Section accordion */
 .sec { margin-bottom: 5px; }
@@ -379,67 +362,12 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .prog-fill { height:100%; border-radius:3px; }
 .prog-val { min-width:45px; text-align:right; font-weight:500; }
 
-/* ── EXPORT / IMPORT MODAL ──────────────────────────────── */
-.modal-overlay {
-  position: fixed; inset: 0; z-index: 9999;
-  background: rgba(0,0,0,0.72); backdrop-filter: blur(4px);
-  display: none; align-items: center; justify-content: center;
+/* Editable inputs - kept minimal for checklist now fields */
+.e {
+  background: transparent; border: none; color: inherit;
+  font-family: var(--mono); font-size: inherit; font-weight: inherit;
+  width: 100%; outline: none; cursor: default; pointer-events: none;
 }
-.modal-overlay.open { display: flex; }
-.modal {
-  background: var(--bg2); border: 1px solid var(--ln2);
-  border-radius: 10px; width: 520px; max-width: 92vw;
-  padding: 22px 24px; position: relative;
-  animation: mopen 0.18s ease;
-}
-@keyframes mopen { from{opacity:0;transform:scale(0.96)} to{opacity:1;transform:scale(1)} }
-.modal-title { font-family: var(--sans); font-size: 14px; font-weight: 700; margin-bottom: 4px; }
-.modal-sub { font-size: 10px; color: var(--d1); margin-bottom: 16px; line-height: 1.6; }
-.modal-close {
-  position: absolute; top: 16px; right: 18px;
-  background: transparent; border: none; color: var(--d1);
-  font-size: 16px; cursor: pointer; padding: 2px 6px; border-radius: 4px;
-}
-.modal-close:hover { background: var(--bg4); color: var(--tx); }
-.modal-tabs { display: flex; gap: 4px; margin-bottom: 14px; }
-.modal-tab {
-  font-family: var(--mono); font-size: 10px; padding: 4px 12px;
-  border-radius: 4px; cursor: pointer; border: 1px solid var(--ln2);
-  background: transparent; color: var(--d1); transition: all 0.15s;
-}
-.modal-tab:hover { background: var(--bg3); color: var(--tx); }
-.modal-tab.active { background: var(--bg3); color: var(--a); border-color: rgba(230,126,34,0.35); }
-.modal-panel { display: none; }
-.modal-panel.active { display: block; }
-.modal-textarea {
-  width: 100%; height: 120px; background: var(--bg3);
-  border: 1px solid var(--ln2); border-radius: 5px;
-  padding: 10px 12px; color: var(--tx); font-family: var(--mono);
-  font-size: 10px; line-height: 1.6; resize: vertical;
-  outline: none; transition: border-color 0.2s;
-}
-.modal-textarea:focus { border-color: rgba(230,126,34,0.4); }
-.modal-textarea::placeholder { color: var(--d2); }
-.modal-actions { display: flex; gap: 8px; margin-top: 12px; }
-.modal-btn {
-  font-family: var(--mono); font-size: 11px; padding: 7px 16px;
-  border-radius: 5px; cursor: pointer; transition: all 0.15s; border: 1px solid;
-}
-.modal-btn.pri { background: var(--bl); border-color: rgba(41,128,185,0.35); color: var(--b); }
-.modal-btn.pri:hover { background: var(--bd); }
-.modal-btn.suc { background: var(--gd); border-color: rgba(39,174,96,0.35); color: var(--g); }
-.modal-btn.suc:hover { background: rgba(39,174,96,0.2); }
-.modal-btn.neu { background: transparent; border-color: var(--ln2); color: var(--d1); }
-.modal-btn.neu:hover { background: var(--bg3); color: var(--tx); }
-.modal-msg { font-size: 10px; margin-top: 8px; min-height: 16px; }
-.modal-msg.ok { color: var(--g); }
-.modal-msg.err { color: var(--r); }
-.data-block {
-  background: var(--bg3); border: 1px solid var(--ln2); border-radius: 5px;
-  padding: 10px 12px; font-size: 9px; color: var(--d1); line-height: 1.7;
-  margin-bottom: 10px;
-}
-.data-block strong { color: var(--tx); }
 
 /* MVRV bar */
 .mvrv-bar { display:flex; height:18px; border-radius:4px; overflow:hidden; }
@@ -581,44 +509,12 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   <!-- Footer -->
   <div class="sb-foot">
     <div class="foot-btns">
-      <button class="foot-btn pri" id="refreshBtn" onclick="fetchPx()">↻ Refresh</button>
-      <button class="foot-btn" id="editBtn" onclick="toggleEdit()">✎ Edit</button>
-    </div>
-    <div class="foot-btns" style="margin-top:0;">
-      <button class="foot-btn" onclick="openModal('export')" style="font-size:9px;">↑ Export Data</button>
-      <button class="foot-btn" onclick="openModal('import')" style="font-size:9px;">↓ Import Data</button>
+      <button class="foot-btn pri" id="refreshBtn" onclick="fetchPx()">↻ Refresh Price</button>
     </div>
     <div class="foot-time" id="footTime">Last refresh: —</div>
     <div class="foot-time" id="mainClock" style="margin-top:2px;">—</div>
   </div>
 </aside>
-
-<!-- ═══ EXPORT / IMPORT MODAL ═══ -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
-  <div class="modal" id="modalBox">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="modal-title" id="modalTitle">Data</div>
-    <div class="modal-sub" id="modalSub"></div>
-    <div id="modal-export" class="modal-panel active">
-      <div class="data-block" id="exportWhat"></div>
-      <textarea class="modal-textarea" id="exportText" readonly placeholder="Generating..."></textarea>
-      <div class="modal-actions">
-        <button class="modal-btn pri" onclick="copyExport()">⎘ Copy to clipboard</button>
-        <button class="modal-btn neu" onclick="closeModal()">Close</button>
-      </div>
-      <div class="modal-msg" id="exportMsg"></div>
-    </div>
-    <div id="modal-import" class="modal-panel">
-      <div class="data-block">Paste your previously exported JSON below. This will <strong>overwrite</strong> your current metrics, notes, and changelog — but will not change the dashboard code itself.</div>
-      <textarea class="modal-textarea" id="importText" placeholder='Paste exported JSON here...'></textarea>
-      <div class="modal-actions">
-        <button class="modal-btn suc" onclick="runImport()">↓ Import & Apply</button>
-        <button class="modal-btn neu" onclick="closeModal()">Cancel</button>
-      </div>
-      <div class="modal-msg" id="importMsg"></div>
-    </div>
-  </div>
-</div>
 
 <!-- ═══════════════════════════════════════ MAIN ═══════════════════════════════════════ -->
 <main class="main">
@@ -693,7 +589,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
                 <tr><td>Lost BTC ~3.7M (18% of supply)</td><td style="color:var(--d1);font-size:9px;">True float ~16M coins</td><td style="text-align:right;"><span class="bdg g">Bullish</span></td></tr>
                 <tr><td>Post-halving timing (month 12)</td><td style="color:var(--d1);font-size:9px;">In Apr–Oct 2026 peak window</td><td style="text-align:right;"><span class="bdg g">Bullish</span></td></tr>
                 <tr><td>LTH losses $200M/day</td><td style="color:var(--d1);font-size:9px;">Need &lt;$25M for exhaustion</td><td style="text-align:right;"><span class="bdg a">Watch</span></td></tr>
-                <tr><td>Geopolitical / oil >$100</td><td style="color:var(--d1);font-size:9px;">Mining cost headwind</td><td style="text-align:right;"><span class="bdg r">Bearish</span></td></tr>
+                <tr><td>Geopolitical / oil $91–103 (volatile)</td><td style="color:var(--d1);font-size:9px;">Strait of Hormuz blockade · WTI $91, Brent $95–103</td><td style="text-align:right;"><span class="bdg a">Watch</span></td></tr>
               </tbody>
             </table>
           </div>
@@ -869,8 +765,8 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
                 <tr><td>LTH Losses</td><td style="color:var(--d1);">&lt;$25M/day exhaustion</td><td style="color:var(--r);font-weight:600;">~$200M/day</td><td><span class="bdg r">Not triggered</span></td><td class="rv">+380%</td></tr>
                 <tr><td>Price vs LTH Realized</td><td style="color:var(--d1);">Price ≈ realized price ~$35k</td><td style="color:var(--r);font-weight:600;">2.1× above</td><td><span class="bdg r">Not triggered</span></td><td class="rv">+428%</td></tr>
                 <tr><td>Post-Halving Timing</td><td style="color:var(--d1);">Month 12–18 post-halving</td><td style="color:var(--g);font-weight:600;">Month 12</td><td><span class="bdg g">In window</span></td><td style="color:var(--d1);">Peak historically here</td></tr>
-                <tr><td>ETF Flows</td><td style="color:var(--d1);">No baseline (Jan 2024 launch)</td><td style="color:var(--b);font-weight:600;">+7,358 BTC/wk</td><td><span class="bdg b">No backtest</span></td><td style="color:var(--d1);">Insufficient history</td></tr>
-                <tr><td>Multi-signal (3+)</td><td style="color:var(--d1);">3+ signals simultaneously</td><td style="color:var(--r);font-weight:600;">0–1 firing</td><td><span class="bdg r">Not triggered</span></td><td class="rv">+410%</td></tr>
+                <tr><td>ETF Flows</td><td style="color:var(--d1);">No baseline (Jan 2024 launch)</td><td style="color:var(--b);font-weight:600;">+$202M/wk IBIT</td><td><span class="bdg b">No backtest</span></td><td style="color:var(--d1);">Insufficient history</td></tr>
+                <tr><td>Geopolitical / Oil</td><td style="color:var(--d1);">Oil &lt; $85 = signal cleared</td><td style="color:var(--a);font-weight:600;">$91–103 volatile</td><td><span class="bdg a">Watch</span></td><td style="color:var(--d1);">Improving but not cleared</td></tr>
               </tbody>
             </table>
             <div class="caveat" style="margin-top:10px;"><strong>Bottom line:</strong> Only the post-halving timing window is active. All deep-value on-chain signals have NOT triggered at $74k. A true multi-signal event would require BTC to fall to roughly $50–65k. The 6/10 score reflects this mid-cycle positioning.</div>
@@ -1192,7 +1088,7 @@ const CHECKS = [
     ev: v => { if(!lastPx) return 0; const n = parseFloat(v.replace(/[^0-9.k]/gi,'').replace('k','000')); if(isNaN(n)) return 0; if(lastPx<=n*1.1) return 2; if(lastPx<=n*1.5) return 1; return 0; } },
   { lbl:'ETF inflows positive 3+ consecutive weeks', sub:'Sustained institutional re-accumulation confirmed', src:'e-etf7', tgt:'3+ weeks positive',
     ev: v => { if(v.trim().startsWith('+')) return 1; return 0; } },
-  { lbl:'Oil / geopolitical risk recedes', sub:'Reduces mining cost pressure, unlocks risk-on appetite', src:null, tgt:'Oil < $85/bbl',
+  { lbl:'Oil / geopolitical risk recedes', sub:'Strait of Hormuz blockade ongoing · WTI $91, Brent $95–103 · volatile', src:null, tgt:'Oil < $85/bbl',
     ev: () => 0 },
   { lbl:'BTC reclaims $80k+ on weekly close', sub:'Breaks above miner breakeven + MSTR cost cluster', src:null, tgt:'> $80k weekly',
     ev: () => { if(!lastPx) return 0; if(lastPx>=80000) return 2; if(lastPx>=74000) return 1; return 0; } },
@@ -1311,24 +1207,6 @@ function loadSecs() {
   });
 }
 
-// ═══ EDIT MODE ════════════════════════════════════════════
-let editMode = false;
-function toggleEdit() {
-  editMode = !editMode;
-  const btn = document.getElementById('editBtn');
-  const shell = document.querySelector('.tab-inner');
-  if(editMode) {
-    document.querySelectorAll('.tab-inner').forEach(t => t.classList.add('edit-mode'));
-    btn.classList.add('edit-on'); btn.textContent='✓ Done';
-    document.querySelectorAll('.e').forEach(e => e.readOnly=false);
-  } else {
-    document.querySelectorAll('.tab-inner').forEach(t => t.classList.remove('edit-mode'));
-    btn.classList.remove('edit-on'); btn.textContent='✎ Edit';
-    document.querySelectorAll('.e').forEach(e => { e.readOnly=true; e.blur(); });
-    save(); logChange(); buildChecklist(); updateTrends();
-  }
-}
-
 // ═══ SAVE / LOAD / TREND ══════════════════════════════════
 function save() {
   const d = {};
@@ -1415,91 +1293,6 @@ function initCharts() {
 
   // 12m dist
   new Chart(document.getElementById('c-d12'), { type:'bar', data:{ labels:['< 0%','0–100%','100–300%','300–600%','>600%'], datasets:[{ data:[0,1,2,4,4], backgroundColor:['rgba(231,76,60,0.7)','rgba(230,126,34,0.5)','rgba(230,126,34,0.75)','rgba(39,174,96,0.65)','rgba(39,174,96,0.9)'], borderRadius:4 }] }, options:{ ...cfgBase, plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>c.parsed.y+' events'}} }, scales:{ ...cfgBase.scales, y:{ ticks:{color:tc,font:{family:FONT,size:9},stepSize:1}, grid:{color:gc}, border:{display:false} } } } });
-}
-
-// ═══ EXPORT / IMPORT ══════════════════════════════════════
-const ALL_KEYS = [SK, SK_PREV, SK_LOG, SK_NOTES, SK_SECS, SK_TABS];
-const KEY_LABELS = {
-  [SK]:       'Metrics (MVRV, hash price, LTH supply, etc.)',
-  [SK_PREV]:  'Previous-week values (for trend arrows)',
-  [SK_LOG]:   'Change log history',
-  [SK_NOTES]: 'Weekly notes',
-  [SK_SECS]:  'Section open/close state',
-  [SK_TABS]:  'Last active tab'
-};
-
-function openModal(mode) {
-  const overlay = document.getElementById('modalOverlay');
-  document.getElementById('modal-export').classList.toggle('active', mode==='export');
-  document.getElementById('modal-import').classList.toggle('active', mode==='import');
-
-  if(mode==='export') {
-    document.getElementById('modalTitle').textContent = 'Export Your Data';
-    document.getElementById('modalSub').textContent = 'Copy this JSON and save it somewhere safe (notes app, email to yourself). Paste it back into Import when you update the dashboard file.';
-    // Build export object
-    const out = {};
-    let count = 0;
-    ALL_KEYS.forEach(k => {
-      const v = localStorage.getItem(k);
-      if(v !== null) { out[k] = JSON.parse(v); count++; }
-    });
-    const lines = ALL_KEYS.filter(k => localStorage.getItem(k) !== null)
-      .map(k => `<strong>${KEY_LABELS[k]}</strong>`).join('<br>');
-    document.getElementById('exportWhat').innerHTML =
-      `Exporting <strong>${count} data store${count!==1?'s':''}</strong>:<br>${lines}`;
-    document.getElementById('exportText').value = JSON.stringify(out, null, 2);
-    document.getElementById('exportMsg').textContent = '';
-  } else {
-    document.getElementById('modalTitle').textContent = 'Import Data';
-    document.getElementById('modalSub').textContent = 'Restore a previous export. Useful after updating the dashboard file or opening it on a new device.';
-    document.getElementById('importText').value = '';
-    document.getElementById('importMsg').textContent = '';
-  }
-  overlay.classList.add('open');
-}
-
-function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('open');
-}
-function closeModalOutside(e) {
-  if(e.target === document.getElementById('modalOverlay')) closeModal();
-}
-
-function copyExport() {
-  const txt = document.getElementById('exportText').value;
-  const msg = document.getElementById('exportMsg');
-  navigator.clipboard.writeText(txt).then(() => {
-    msg.className = 'modal-msg ok';
-    msg.textContent = '✓ Copied to clipboard — paste it somewhere safe (email, notes app)';
-  }).catch(() => {
-    // fallback: select the text
-    const ta = document.getElementById('exportText');
-    ta.select(); document.execCommand('copy');
-    msg.className = 'modal-msg ok';
-    msg.textContent = '✓ Selected — press Ctrl/Cmd+C to copy';
-  });
-}
-
-function runImport() {
-  const raw = document.getElementById('importText').value.trim();
-  const msg = document.getElementById('importMsg');
-  if(!raw) { msg.className='modal-msg err'; msg.textContent='⚠ Nothing pasted yet'; return; }
-  try {
-    const data = JSON.parse(raw);
-    let imported = 0;
-    ALL_KEYS.forEach(k => {
-      if(data[k] !== undefined) {
-        localStorage.setItem(k, JSON.stringify(data[k]));
-        imported++;
-      }
-    });
-    msg.className = 'modal-msg ok';
-    msg.textContent = '✓ Imported ' + imported + ' data stores — reloading dashboard...';
-    setTimeout(() => { closeModal(); location.reload(); }, 1200);
-  } catch(e) {
-    msg.className = 'modal-msg err';
-    msg.textContent = '⚠ Invalid JSON — make sure you pasted the full export without edits';
-  }
 }
 
 // ═══ INIT ═════════════════════════════════════════════════
