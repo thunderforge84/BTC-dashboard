@@ -418,18 +418,18 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
         <div class="score-ring">
           <svg width="58" height="58" viewBox="0 0 58 58">
             <circle cx="29" cy="29" r="23" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="5"/>
-            <circle cx="29" cy="29" r="23" fill="none" stroke="#e67e22" stroke-width="5"
-              stroke-dasharray="144.5" stroke-dashoffset="57.8" stroke-linecap="round"/>
+            <circle cx="29" cy="29" r="23" fill="none" stroke="#27ae60" stroke-width="5"
+              stroke-dasharray="144.5" stroke-dashoffset="41.3" stroke-linecap="round"/>
           </svg>
           <div class="score-inner">
-            <div class="score-n">6</div>
+            <div class="score-n" style="color:var(--g);">7</div>
             <div class="score-d">/10</div>
           </div>
         </div>
         <div class="score-meta">
-          <div class="score-verdict">Cautious Accumulation</div>
-          <div class="score-desc">Not a screaming buy. Not a sell. Stage your entry — do not lump sum.</div>
-          <div class="verdict-tag">⚡ Watch Zone</div>
+          <div class="score-verdict" style="color:var(--g);">Accumulation Zone</div>
+          <div class="score-desc">MVRV 1.35 — approaching buy signal. Price is 1.35× realized price. Two signals now close. Stage your entry.</div>
+          <div class="verdict-tag" style="background:var(--gd);color:var(--g);border-color:rgba(39,174,96,0.3);">▲ Upgraded Signal</div>
         </div>
       </div>
     </div>
@@ -563,19 +563,25 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
           </div>
           <div class="sec-body">
             <div class="mg4">
-              <div class="mc a"><div class="mc-lbl">MVRV Ratio</div><div class="mc-val a"><input class="e" id="e-mvrv" value="2.1"/></div><div class="mc-sub">Sell>3.7 · Buy&lt;1</div><div class="mc-trend" id="t-mvrv"></div></div>
-              <div class="mc g"><div class="mc-lbl">LTH Supply</div><div class="mc-val g"><input class="e" id="e-lth" value="8.05M"/></div><div class="mc-sub">Near cycle high</div><div class="mc-trend" id="t-lth"></div></div>
-              <div class="mc g"><div class="mc-lbl">Realized Price</div><div class="mc-val g"><input class="e" id="e-rp" value="~$35k"/></div><div class="mc-sub">Avg network cost basis</div><div class="mc-trend" id="t-rp"></div></div>
-              <div class="mc r"><div class="mc-lbl">LTH Daily Losses</div><div class="mc-val r"><input class="e" id="e-lthloss" value="$200M"/></div><div class="mc-sub">Target: &lt;$25M/day</div><div class="mc-trend" id="t-lthloss"></div></div>
+              <div class="mc a"><div class="mc-lbl">MVRV Ratio</div><div class="mc-val a"><input class="e" id="e-mvrv" value="1.35"/></div><div class="mc-sub">Sell>3.7 · Buy&lt;1 · Source: Bitbo</div><div class="mc-trend" id="t-mvrv"></div></div>
+              <div class="mc g"><div class="mc-lbl">LTH Supply</div><div class="mc-val g"><input class="e" id="e-lth" value="~8.05M"/></div><div class="mc-sub">Near cycle high · Glassnode</div><div class="mc-trend" id="t-lth"></div></div>
+              <div class="mc g"><div class="mc-lbl">Realized Price</div><div class="mc-val g"><input class="e" id="e-rp" value="$54,229"/></div><div class="mc-sub">Live · Bitbo.io Apr 15</div><div class="mc-trend" id="t-rp"></div></div>
+              <div class="mc r"><div class="mc-lbl">LTH Daily Losses</div><div class="mc-val r"><input class="e" id="e-lthloss" value="$200M"/></div><div class="mc-sub">Target: &lt;$25M/day · Glassnode</div><div class="mc-trend" id="t-lthloss"></div></div>
+            </div>
+            <div class="mg4" style="margin-bottom:10px;">
+              <div class="mc r"><div class="mc-lbl">STH Realized Price</div><div class="mc-val r">$81,239</div><div class="mc-sub">Short-term holder avg cost</div></div>
+              <div class="mc r"><div class="mc-lbl">STH MVRV</div><div class="mc-val r">0.90</div><div class="mc-sub">STH underwater · Bearish ST</div></div>
+              <div class="mc g"><div class="mc-lbl">Power Law Bottom Band</div><div class="mc-val g">$55,723</div><div class="mc-sub">Key long-term floor · Bitbo</div></div>
+              <div class="mc b"><div class="mc-lbl">Last Updated</div><div class="mc-val b" style="font-size:13px;">Apr 15 2026</div><div class="mc-sub">Source: bitbo.io live</div></div>
             </div>
             <div style="margin-bottom:6px;font-size:8px;color:var(--d2);letter-spacing:0.08em;text-transform:uppercase;">MVRV Cycle Zone</div>
             <div class="mvrv-bar">
               <div class="mvrv-z" style="width:8%;background:#0e2318;color:#4ade80;font-size:6px;">LOST</div>
               <div class="mvrv-z" style="width:10%;background:#14532d;color:#4ade80;">BUY</div>
-              <div class="mvrv-z" style="width:14%;background:#1a4a2e;color:#86efac;">ACCUM</div>
+              <div class="mvrv-z" style="width:14%;background:#1a4a2e;color:#86efac;outline:1.5px solid #22c55e;outline-offset:-1px;font-size:8px;">★1.35</div>
               <div class="mvrv-z" style="width:16%;background:#1e3818;color:#a3e635;">FAIR</div>
-              <div class="mvrv-z" style="width:18%;background:#3a2800;color:#fbbf24;outline:1.5px solid #e67e22;outline-offset:-1px;font-size:8px;">★2.1</div>
-              <div class="mvrv-z" style="width:20%;background:#391600;color:#fb923c;">DIST</div>
+              <div class="mvrv-z" style="width:18%;background:#3a2800;color:#fbbf24;">DIST</div>
+              <div class="mvrv-z" style="width:20%;background:#391600;color:#fb923c;">DIST+</div>
               <div class="mvrv-z" style="width:14%;background:#380d0d;color:#f87171;">SELL</div>
             </div>
             <div class="mvrv-lbls"><span>0</span><span>1.0</span><span>1.5</span><span>2.0</span><span>2.5</span><span>3.5</span><span>5+</span></div>
@@ -583,7 +589,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
             <div style="font-size:8px;color:var(--d2);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">Signal Scorecard</div>
             <table class="tbl">
               <tbody>
-                <tr><td>MVRV 2.1 — Mid-cycle neutral</td><td style="color:var(--d1);font-size:9px;">Not cheap, not bubbly</td><td style="text-align:right;"><span class="bdg a">Neutral</span></td></tr>
+                <tr><td>MVRV 1.35 — Accumulation zone</td><td style="color:var(--d1);font-size:9px;">Approaching buy signal · sub-1.5 = strong buy</td><td style="text-align:right;"><span class="bdg g">Bullish</span></td></tr>
                 <tr><td>LTH Supply near cycle peak</td><td style="color:var(--d1);font-size:9px;">Accumulating, not distributing</td><td style="text-align:right;"><span class="bdg g">Bullish</span></td></tr>
                 <tr><td>Exchange reserves 6-year lows</td><td style="color:var(--d1);font-size:9px;">Supply squeeze structural</td><td style="text-align:right;"><span class="bdg g">Bullish</span></td></tr>
                 <tr><td>Lost BTC ~3.7M (18% of supply)</td><td style="color:var(--d1);font-size:9px;">True float ~16M coins</td><td style="text-align:right;"><span class="bdg g">Bullish</span></td></tr>
@@ -605,8 +611,8 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
             <div class="mg4">
               <div class="mc r"><div class="mc-lbl">Industry Breakeven</div><div class="mc-val r"><input class="e" id="e-miner" value="$77–88k"/></div><div class="mc-sub">JPMorgan / CoinShares</div><div class="mc-trend" id="t-miner"></div></div>
               <div class="mc g"><div class="mc-lbl">Efficient Miners</div><div class="mc-val g"><input class="e" id="e-effm" value="$34–43k"/></div><div class="mc-sub">MARA/CLSK — profitable</div></div>
-              <div class="mc r"><div class="mc-lbl">Hash Price $/PH/day</div><div class="mc-val r"><input class="e" id="e-hash" value="$33.25"/></div><div class="mc-sub">Capitulation floor: $28</div><div class="mc-trend" id="t-hash"></div></div>
-              <div class="mc a"><div class="mc-lbl">Network Hashrate</div><div class="mc-val a"><input class="e" id="e-hrate" value="~969 EH/s"/></div><div class="mc-sub">7-day SMA · Apr 13</div><div class="mc-trend" id="t-hrate"></div></div>
+              <div class="mc r"><div class="mc-lbl">Hash Price $/PH/day</div><div class="mc-val r"><input class="e" id="e-hash" value="$33"/></div><div class="mc-sub">Capitulation floor: $28 · Bitbo</div><div class="mc-trend" id="t-hash"></div></div>
+              <div class="mc a"><div class="mc-lbl">Network Hashrate</div><div class="mc-val a"><input class="e" id="e-hrate" value="~1,059 EH/s"/></div><div class="mc-sub">24hr avg · Bitbo Apr 15</div><div class="mc-trend" id="t-hrate"></div></div>
             </div>
             <div class="mg2">
               <div>
@@ -760,16 +766,16 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
             <table class="tbl">
               <thead><tr><th>Signal</th><th>Trigger Level</th><th>Current</th><th>Status</th><th>Hist. 12m Return</th></tr></thead>
               <tbody>
-                <tr><td>MVRV Ratio</td><td style="color:var(--d1);">&lt;1.5 buy · &lt;1.0 deep buy</td><td style="color:var(--a);font-weight:600;">2.1</td><td><span class="bdg a">Not triggered</span></td><td class="rv">+312%</td></tr>
-                <tr><td>Hash Price</td><td style="color:var(--d1);">≤$28/PH/day capitulation</td><td style="color:var(--a);font-weight:600;">$33.25</td><td><span class="bdg a">Near trigger</span></td><td class="rv">+195%</td></tr>
+                <tr><td>MVRV Ratio</td><td style="color:var(--d1);">&lt;1.5 buy · &lt;1.0 deep buy</td><td style="color:var(--g);font-weight:600;">1.35 ✓</td><td><span class="bdg g">CLOSE to trigger</span></td><td class="rv">+312%</td></tr>
+                <tr><td>Hash Price</td><td style="color:var(--d1);">≤$28/PH/day capitulation</td><td style="color:var(--a);font-weight:600;">$33</td><td><span class="bdg a">Near trigger</span></td><td class="rv">+195%</td></tr>
                 <tr><td>LTH Losses</td><td style="color:var(--d1);">&lt;$25M/day exhaustion</td><td style="color:var(--r);font-weight:600;">~$200M/day</td><td><span class="bdg r">Not triggered</span></td><td class="rv">+380%</td></tr>
-                <tr><td>Price vs LTH Realized</td><td style="color:var(--d1);">Price ≈ realized price ~$35k</td><td style="color:var(--r);font-weight:600;">2.1× above</td><td><span class="bdg r">Not triggered</span></td><td class="rv">+428%</td></tr>
+                <tr><td>Price vs LTH Realized ($54,229)</td><td style="color:var(--d1);">Price ≈ realized price</td><td style="color:var(--a);font-weight:600;">1.35× above</td><td><span class="bdg a">Close</span></td><td class="rv">+428%</td></tr>
                 <tr><td>Post-Halving Timing</td><td style="color:var(--d1);">Month 12–18 post-halving</td><td style="color:var(--g);font-weight:600;">Month 12</td><td><span class="bdg g">In window</span></td><td style="color:var(--d1);">Peak historically here</td></tr>
                 <tr><td>ETF Flows</td><td style="color:var(--d1);">No baseline (Jan 2024 launch)</td><td style="color:var(--b);font-weight:600;">+$202M/wk IBIT</td><td><span class="bdg b">No backtest</span></td><td style="color:var(--d1);">Insufficient history</td></tr>
                 <tr><td>Geopolitical / Oil</td><td style="color:var(--d1);">Oil &lt; $85 = signal cleared</td><td style="color:var(--a);font-weight:600;">$91–103 volatile</td><td><span class="bdg a">Watch</span></td><td style="color:var(--d1);">Improving but not cleared</td></tr>
               </tbody>
             </table>
-            <div class="caveat" style="margin-top:10px;"><strong>Bottom line:</strong> Only the post-halving timing window is active. All deep-value on-chain signals have NOT triggered at $74k. A true multi-signal event would require BTC to fall to roughly $50–65k. The 6/10 score reflects this mid-cycle positioning.</div>
+            <div class="caveat" style="margin-top:10px;"><strong>Bottom line (Apr 15):</strong> MVRV at 1.35 is now in the accumulation zone — this is a meaningful signal upgrade from neutral. Price is only 1.35× realized price ($54,229), close to historical buy territory. Hash price ($33) approaching $28 capitulation floor. Two signals now "close". A further BTC drop toward $54k would trigger MVRV sub-1.0 (deep buy). Current setup is more bullish than previously shown.</div>
           </div>
         </div>
 
