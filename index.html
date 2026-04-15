@@ -38,6 +38,30 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 /* ── APP SHELL ──────────────────────────────────────────── */
 .app { display: flex; height: 100vh; overflow: hidden; }
 
+/* ── MOBILE TOP BAR ─────────────────────────────────────── */
+.mob-bar {
+  display: none; height: 52px; flex-shrink: 0;
+  background: var(--bg1); border-bottom: 1px solid var(--ln2);
+  align-items: center; padding: 0 12px; gap: 10px;
+}
+.mob-mark { width: 28px; height: 28px; border-radius: 5px; background: var(--a); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:#000; flex-shrink:0; font-family:var(--sans); }
+.mob-score { font-family:var(--sans); font-size:18px; font-weight:700; color:var(--g); flex-shrink:0; }
+.mob-px { font-family:var(--sans); font-size:16px; font-weight:600; flex:1; }
+.mob-chg { font-size:10px; }
+.mob-ham {
+  width:36px; height:36px; border-radius:6px; border:1px solid var(--ln2);
+  background:transparent; display:flex; flex-direction:column; align-items:center;
+  justify-content:center; gap:5px; cursor:pointer; flex-shrink:0;
+}
+.mob-ham span { width:16px; height:1.5px; background:var(--tx); border-radius:1px; display:block; }
+
+/* ── SIDEBAR OVERLAY (mobile) ───────────────────────────── */
+.sb-overlay {
+  display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6);
+  z-index:999; backdrop-filter:blur(2px);
+}
+.sb-overlay.open { display:block; }
+
 /* ── SIDEBAR ────────────────────────────────────────────── */
 .sb {
   width: var(--sb); flex-shrink: 0;
@@ -397,10 +421,87 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 @keyframes fg{0%,100%{background:transparent}50%{background:rgba(39,174,96,0.08)}}
 @keyframes fr{0%,100%{background:transparent}50%{background:rgba(231,76,60,0.08)}}
 .fup{animation:fg 0.5s ease;} .fdn{animation:fr 0.5s ease;}
+
+/* ── MOBILE RESPONSIVE ───────────────────────────────────── */
+@media (max-width: 768px) {
+  .mob-bar { display: flex; }
+  .tab-bar-right { display: none; }
+
+  .app { flex-direction: column; }
+
+  /* Sidebar becomes a slide-in drawer */
+  .sb {
+    position: fixed; top: 0; left: -280px; width: 280px; height: 100vh;
+    z-index: 1000; transition: left 0.25s ease;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.5);
+  }
+  .sb.open { left: 0; }
+
+  /* Main fills full width */
+  .main { width: 100%; min-width: 0; }
+
+  /* Tab bar scrolls horizontally */
+  .tab-bar { padding: 0 8px; gap: 1px; overflow-x: auto; }
+  .main-tab { font-size: 10px; padding: 6px 10px; white-space: nowrap; flex-shrink: 0; }
+
+  /* Content padding reduced */
+  .tab-inner { padding: 14px 12px 60px; }
+
+  /* Metric grids go 2-col on mobile */
+  .mg4 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .mg3 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .mg2 { grid-template-columns: minmax(0,1fr); }
+
+  /* Checklist items reflow */
+  .chk-item { grid-template-columns: 18px 1fr 60px; grid-template-rows: auto auto; gap: 4px; }
+  .chk-tgt { display: none; }
+  .chk-now { grid-column: 2; }
+  .chk-stat { grid-column: 3; grid-row: 1; }
+
+  /* Score ring smaller */
+  .score-ring { width: 48px; height: 48px; }
+  .score-n { font-size: 17px; }
+
+  /* Heatmap scrolls */
+  .hm-row { grid-template-columns: 110px repeat(5,1fr); font-size: 9px; }
+  .hm-cell { padding: 4px 2px; font-size: 9px; }
+
+  /* Tables scroll horizontally */
+  .card { overflow-x: auto; }
+  .tbl { min-width: 480px; }
+
+  /* Backtest sub-tabs wrap */
+  .subtab-bar { gap: 4px; }
+  .subtab { font-size: 9px; padding: 4px 8px; }
+
+  /* Section headers */
+  .sec-tag { display: none; }
+
+  /* Flow bars */
+  .flow-lbl { width: 80px; font-size: 8px; }
+
+  /* Timeline */
+  .tl-rets { gap: 3px; }
+  .tl-ret { font-size: 8px; padding: 2px 5px; }
+}
 </style>
 </head>
 <body>
+<div class="sb-overlay" id="sbOverlay" onclick="closeSb()"></div>
 <div class="app">
+
+<!-- MOBILE TOP BAR -->
+<div class="mob-bar">
+  <div class="mob-mark">₿</div>
+  <div class="mob-score" id="mobScore">7</div>
+  <div style="flex:1;min-width:0;">
+    <div class="mob-px" id="mobPx">Loading...</div>
+    <div class="mob-chg" id="mobChg" style="color:var(--d1);">—</div>
+  </div>
+  <button class="mob-ham" onclick="toggleSb()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</div>
 
 <!-- ═══════════════════════════════════════ SIDEBAR ═══════════════════════════════════════ -->
 <aside class="sb">
@@ -523,7 +624,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 </aside>
 
 <!-- ═══════════════════════════════════════ MAIN ═══════════════════════════════════════ -->
-<main class="main">
+<main class="main" style="display:flex;flex-direction:column;flex:1;overflow:hidden;min-width:0;">
 
   <!-- Tab bar -->
   <div class="tab-bar">
@@ -1127,6 +1228,22 @@ const SK_NOTES = 'btcv4_notes', SK_SECS = 'btcv4_secs', SK_TABS = 'btcv4_tabs';
 function store(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
 function load(k, def) { try { const r = localStorage.getItem(k); return r ? JSON.parse(r) : def; } catch(e){ return def; } }
 
+// ═══ MOBILE SIDEBAR ═══════════════════════════════════════
+function toggleSb() {
+  document.querySelector('.sb').classList.toggle('open');
+  document.getElementById('sbOverlay').classList.toggle('open');
+}
+function closeSb() {
+  document.querySelector('.sb').classList.remove('open');
+  document.getElementById('sbOverlay').classList.remove('open');
+}
+// Close sidebar when nav item tapped on mobile
+document.querySelectorAll('.nav-item').forEach(n => {
+  n.addEventListener('click', () => {
+    if(window.innerWidth <= 768) closeSb();
+  });
+});
+
 // ═══ CLOCK ════════════════════════════════════════════════
 function tick() {
   const s = new Date().toLocaleString('en-SG',{timeZone:'Asia/Singapore',hour12:false,day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',second:'2-digit'});
@@ -1161,7 +1278,13 @@ async function fetchPx() {
     chEl.textContent = sign + ch.toFixed(2) + '% (24h)';
     chEl.style.color = ch >= 0 ? 'var(--g)' : 'var(--r)';
 
-    document.getElementById('sbDd').textContent = 'Drawdown from ATH: ' + ((px - 128198)/128198*100).toFixed(1) + '%';
+    document.getElementById('sbDd').textContent = 'Drawdown from ATH: ' + ((px - 126277)/126277*100).toFixed(1) + '%';
+
+    // Update mobile top bar
+    const mobPx = document.getElementById('mobPx');
+    const mobChg = document.getElementById('mobChg');
+    if(mobPx) mobPx.textContent = '$' + px.toLocaleString('en-US',{maximumFractionDigits:0});
+    if(mobChg) { mobChg.textContent = sign + ch.toFixed(2) + '% (24h)'; mobChg.style.color = ch>=0?'var(--g)':'var(--r)'; }
 
     // Update price pin on level bar
     const lo = 34000, hi = 118000;
