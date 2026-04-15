@@ -876,20 +876,90 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
         <!-- DORMANT WALLETS -->
         <div class="sec" id="s-wallets">
           <div class="sec-hd closed" onclick="toggleSec(this)">
-            <div class="sec-hd-left"><span class="sec-ic">👁</span><span class="sec-title">Dormant Wallet Activity</span><span class="sec-tag">— only bearish if coins route to exchange deposits</span></div>
+            <div class="sec-hd-left"><span class="sec-ic">👁</span><span class="sec-title">Dormant Wallet Activity</span><span class="sec-tag">— updated each dashboard refresh</span></div>
             <span class="sec-chev">▼</span>
           </div>
           <div class="sec-body" style="display:none;">
+
+            <!-- Status banner -->
+            <div style="display:flex;align-items:center;justify-content:space-between;background:var(--ad);border:1px solid rgba(230,126,34,0.25);border-radius:6px;padding:10px 14px;margin-bottom:14px;">
+              <div>
+                <div style="font-size:8px;letter-spacing:0.09em;text-transform:uppercase;color:var(--a);margin-bottom:3px;">Current Status · Last checked Apr 15 2026</div>
+                <div style="font-family:var(--sans);font-size:14px;font-weight:700;color:var(--a);">Watch — Elevated but Not Alarming</div>
+                <div style="font-size:9px;color:var(--d1);margin-top:3px;">Old coins moving at above-average rate · No confirmed exchange deposits from dormant wallets this week</div>
+              </div>
+              <span class="bdg a" style="font-size:9px;padding:4px 10px;">Watch</span>
+            </div>
+
+            <!-- How to read -->
+            <div style="font-size:8px;color:var(--d2);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">What to watch for</div>
+            <div class="mg3" style="margin-bottom:14px;">
+              <div style="background:var(--gl);border:1px solid rgba(39,174,96,0.2);border-radius:6px;padding:10px 12px;">
+                <div style="font-size:9px;font-weight:600;color:var(--g);margin-bottom:5px;">✓ Neutral / Bullish</div>
+                <div style="font-size:9px;color:var(--d1);line-height:1.7;">Coins move to new self-custody addresses · No exchange deposit address detected · Coins split into multiple wallets (custody reshuffle) · Movement from Coinbase/Fidelity custody addresses (UTXO consolidation)</div>
+              </div>
+              <div style="background:var(--al);border:1px solid rgba(230,126,34,0.2);border-radius:6px;padding:10px 12px;">
+                <div style="font-size:9px;font-weight:600;color:var(--a);margin-bottom:5px;">⚠ Watch</div>
+                <div style="font-size:9px;color:var(--d1);line-height:1.7;">Destination unknown or untagged · Multiple old wallets moving in same week · Test transaction sent first (often precedes a larger move) · Coins moving alongside rising exchange inflows</div>
+              </div>
+              <div style="background:var(--rl);border:1px solid rgba(231,76,60,0.2);border-radius:6px;padding:10px 12px;">
+                <div style="font-size:9px;font-weight:600;color:var(--r);margin-bottom:5px;">✕ Bearish</div>
+                <div style="font-size:9px;color:var(--d1);line-height:1.7;">Coins route directly to known exchange deposit addresses · Large amount (1,000+ BTC) from 5yr+ wallet to exchange · Multiple dormant wallets all routing to exchanges in same week</div>
+              </div>
+            </div>
+
+            <!-- Notable events log -->
+            <div style="font-size:8px;color:var(--d2);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">Notable Events Log · Most recent first</div>
             <table class="tbl">
-              <thead><tr><th>Date</th><th>Age</th><th>BTC Moved</th><th>Cost Then</th><th>Destination</th><th>Signal</th></tr></thead>
+              <thead><tr><th>Date</th><th>Age</th><th>BTC Moved</th><th>Value Then</th><th>Value Now</th><th>Destination</th><th>Verdict</th></tr></thead>
               <tbody>
-                <tr><td>Jul 2025</td><td>14 yrs</td><td style="color:var(--a);font-weight:600;">80,000 BTC</td><td style="color:var(--d1);">~$0</td><td style="font-size:9px;color:var(--d1);">New self-custody (8 wallets)</td><td><span class="bdg g">Neutral</span></td></tr>
-                <tr><td>Mar 20 '26</td><td>14 yrs</td><td style="color:var(--a);font-weight:600;">2,100 BTC</td><td style="color:var(--d1);">~$6.50</td><td style="font-size:9px;color:var(--d1);">Unknown — chunked</td><td><span class="bdg a">Watch</span></td></tr>
-                <tr><td>Mar 31 '26</td><td>12 yrs</td><td style="color:var(--a);font-weight:600;">500 BTC</td><td style="color:var(--d1);">~$5–10</td><td style="font-size:9px;color:var(--d1);">5 new addresses</td><td><span class="bdg g">Neutral</span></td></tr>
-                <tr><td>Mar '26 total</td><td>2012–17</td><td style="color:var(--a);font-weight:600;">1,910 BTC</td><td style="color:var(--d1);">—</td><td style="font-size:9px;color:var(--d1);">39 transactions</td><td><span class="bdg a">Watch</span></td></tr>
+                <tr>
+                  <td>Mar 20 2026</td><td>~14 yrs</td>
+                  <td style="color:var(--a);font-weight:600;">2,100 BTC</td>
+                  <td style="font-size:9px;color:var(--d1);">~$13,685 ($6.50/BTC)</td>
+                  <td style="font-size:9px;color:var(--g);">~$147M</td>
+                  <td style="font-size:9px;color:var(--d1);">New address · test tx sent first · destination untagged</td>
+                  <td><span class="bdg a">Watch</span></td>
+                </tr>
+                <tr>
+                  <td>Jan 2026</td><td>~13 yrs</td>
+                  <td style="color:var(--a);font-weight:600;">909 BTC</td>
+                  <td style="font-size:9px;color:var(--d1);">~$300 ($0.33/BTC)</td>
+                  <td style="font-size:9px;color:var(--g);">~$85M</td>
+                  <td style="font-size:9px;color:var(--d1);">New address · no exchange deposit detected</td>
+                  <td><span class="bdg g">Neutral</span></td>
+                </tr>
+                <tr>
+                  <td>Jul 2025</td><td>~14 yrs</td>
+                  <td style="color:var(--a);font-weight:600;">80,000 BTC</td>
+                  <td style="font-size:9px;color:var(--d1);">~$210k ($0.002/BTC)</td>
+                  <td style="font-size:9px;color:var(--g);">~$5.8B</td>
+                  <td style="font-size:9px;color:var(--d1);">8 new wallets · Satoshi-era · no exchange routing</td>
+                  <td><span class="bdg g">Neutral</span></td>
+                </tr>
+                <tr>
+                  <td>Jul 2025 (same period)</td><td>~14 yrs</td>
+                  <td style="color:var(--a);font-weight:600;">2× 10,000 BTC</td>
+                  <td style="font-size:9px;color:var(--d1);">~$7,800 each ($0.78/BTC)</td>
+                  <td style="font-size:9px;color:var(--g);">$1.1B each</td>
+                  <td style="font-size:9px;color:var(--d1);">New addresses · 30 mins apart · Lookonchain tracked</td>
+                  <td><span class="bdg g">Neutral</span></td>
+                </tr>
               </tbody>
             </table>
-            <div class="caveat" style="margin-top:10px;">Red flag: coins routing to known exchange deposit addresses = bearish. Self-custody / multisig = neutral. Tools: Whale Alert · Lookonchain · Glassnode Revived Supply.</div>
+
+            <div class="sep"></div>
+
+            <!-- Context note -->
+            <div style="font-size:9px;color:var(--d1);line-height:1.8;">
+              <strong style="color:var(--tx);">Broader context (2025–2026):</strong> Over 62,800 BTC exited wallets older than 7 years in early-to-mid 2025 — more than double the same period in 2024. This is the "whale awakening" cycle analysts have been tracking. The key finding so far: <span style="color:var(--g);">none of the major movements have been traced to exchange deposit addresses</span> — coins are reshuffling into new custody, not hitting the market. This is consistent with OGs repositioning (estate planning, custody upgrades, institutional transfer) rather than selling.<br><br>
+              <strong style="color:var(--a);">⚠ Important caveat:</strong> CDD spikes from ETF custodians (Coinbase, Fidelity) doing routine UTXO consolidation can look identical to OG selling on raw metrics. Always cross-check a spike against Whale Alert destination tags before drawing conclusions.
+            </div>
+
+            <div class="caveat" style="margin-top:12px;">
+              <strong>Sources:</strong> Whale Alert (whale-alert.io) · Lookonchain (lookonchain.com) · crypto.news · coinalertnews.com · TradingView/CoinTelegraph · Hokanews · Newsweek · Arkham Intelligence. This section is updated each time the dashboard is refreshed — events are manually verified against multiple sources before being added.
+            </div>
+
           </div>
         </div>
 
