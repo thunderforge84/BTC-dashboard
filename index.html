@@ -966,31 +966,112 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
         <!-- PRICE TARGETS -->
         <div class="sec" id="s-targets">
           <div class="sec-hd closed" onclick="toggleSec(this)">
-            <div class="sec-hd-left"><span class="sec-ic">◎</span><span class="sec-title">Price Targets & Key Levels</span><span class="sec-tag">— 12-month forward scenarios</span></div>
+            <div class="sec-hd-left"><span class="sec-ic">◎</span><span class="sec-title">Price Targets & Key Levels</span><span class="sec-tag">— scenarios, not forecasts · last updated Apr 15 2026</span></div>
             <span class="sec-chev">▼</span>
           </div>
           <div class="sec-body" style="display:none;">
-            <div class="mg3" style="margin-bottom:16px;">
-              <div class="tgt bear"><div class="tgt-lbl">Bear Case · 20%</div><div class="tgt-px">$45–55k</div><div class="tgt-prob">Miner capitulation + recession + ETF outflows</div><div class="tgt-cond">Requires sustained geopolitical escalation, oil >$110, macro risk-off</div></div>
-              <div class="tgt base"><div class="tgt-lbl">Base Case · 55%</div><div class="tgt-px">$85–110k</div><div class="tgt-prob">Post-halving cycle continues · ETF demand holds</div><div class="tgt-cond">Miners capitulate then recover, geopolitics stabilize, BTC breaks $80k</div></div>
-              <div class="tgt bull"><div class="tgt-lbl">Bull Case · 25%</div><div class="tgt-px">$130–165k</div><div class="tgt-prob">New ATH · sovereign buying · Fed cuts</div><div class="tgt-cond">MVRV re-rates to 3.5+, Oct 2025 ATH was mid-cycle not the top</div></div>
+
+            <!-- Honest caveat up front -->
+            <div class="discl" style="margin-bottom:14px;">⚠ <strong>These are scenarios, not forecasts.</strong> Nobody — including institutional analysts with Bloomberg terminals — can reliably predict Bitcoin's price 12 months out. What follows is a structured way to think about what would need to happen for each outcome, grounded in on-chain levels and analyst consensus. Do not treat any price target as a prediction.</div>
+
+            <!-- Analyst consensus bar -->
+            <div style="font-size:8px;color:var(--d2);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">Institutional Analyst Consensus Range · Apr 2026</div>
+            <div style="background:var(--bg2);border:1px solid var(--ln2);border-radius:6px;padding:12px 14px;margin-bottom:14px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+                <span style="font-size:9px;color:var(--d1);min-width:80px;">Bear / off-year</span>
+                <div style="flex:1;height:8px;background:var(--bg4);border-radius:4px;position:relative;min-width:120px;">
+                  <div style="position:absolute;left:0%;width:22%;height:100%;background:var(--r);border-radius:4px;opacity:0.6;"></div>
+                  <div style="position:absolute;left:22%;width:48%;height:100%;background:var(--a);border-radius:0;opacity:0.7;"></div>
+                  <div style="position:absolute;left:70%;width:30%;height:100%;background:var(--g);border-radius:0 4px 4px 0;opacity:0.6;"></div>
+                  <div style="position:absolute;left:28%;top:-14px;font-size:8px;color:var(--tx);white-space:nowrap;">▼ NOW $73k</div>
+                </div>
+                <span style="font-size:9px;color:var(--d1);min-width:60px;text-align:right;">Bull</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:8px;color:var(--d2);margin-bottom:10px;">
+                <span>$55k</span><span>$75k</span><span>$100k</span><span>$125k</span><span>$150k</span><span>$175k+</span>
+              </div>
+              <div style="font-size:8px;color:var(--d2);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:6px;">Named analyst targets</div>
+              <div style="display:flex;flex-wrap:wrap;gap:5px;">
+                <span style="font-size:9px;background:var(--rl);color:var(--r);padding:2px 8px;border-radius:3px;border:1px solid rgba(231,76,60,0.2);">Timmer (Fidelity) $65–75k off-year</span>
+                <span style="font-size:9px;background:var(--al);color:var(--a);padding:2px 8px;border-radius:3px;border:1px solid rgba(230,126,34,0.2);">Carol Alexander $75–150k</span>
+                <span style="font-size:9px;background:var(--al);color:var(--a);padding:2px 8px;border-radius:3px;border:1px solid rgba(230,126,34,0.2);">CoinShares $120–170k</span>
+                <span style="font-size:9px;background:var(--gl);color:var(--g);padding:2px 8px;border-radius:3px;border:1px solid rgba(39,174,96,0.2);">Standard Chartered $150k</span>
+                <span style="font-size:9px;background:var(--gl);color:var(--g);padding:2px 8px;border-radius:3px;border:1px solid rgba(39,174,96,0.2);">Nexo $150–200k</span>
+                <span style="font-size:9px;background:var(--gl);color:var(--g);padding:2px 8px;border-radius:3px;border:1px solid rgba(39,174,96,0.2);">Maple Finance $175k</span>
+              </div>
+              <div style="font-size:8px;color:var(--d2);margin-top:7px;">Consensus clusters at $120–175k · Bear camp at $65–75k · Extreme bear $55–57k stress test low</div>
             </div>
+
+            <!-- 3 scenario cards -->
+            <div style="font-size:8px;color:var(--d2);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">Scenario Conditions — what would need to happen</div>
+            <div class="mg3" style="margin-bottom:14px;">
+
+              <div class="tgt bear">
+                <div class="tgt-lbl">Bear / Consolidation</div>
+                <div class="tgt-px">$55–75k</div>
+                <div class="tgt-prob" style="font-size:8px;margin-bottom:8px;">Timmer's "off-year" thesis · stress test low ~$55k</div>
+                <div style="font-size:9px;color:var(--d1);line-height:1.7;text-align:left;">
+                  ✕ Oct 2025 was the cycle top (not mid-cycle)<br>
+                  ✕ Miners capitulate but BTC doesn't recover<br>
+                  ✕ ETF outflows sustained for 2+ months<br>
+                  ✕ Oil stays >$100, risk-off macro persists<br>
+                  ✕ MVRV breaks below 1.0 (price near $54k realized)
+                </div>
+              </div>
+
+              <div class="tgt base">
+                <div class="tgt-lbl">Base Case</div>
+                <div class="tgt-px">$90–130k</div>
+                <div class="tgt-prob" style="font-size:8px;margin-bottom:8px;">Post-halving recovery · institutional demand holds</div>
+                <div style="font-size:9px;color:var(--d1);line-height:1.7;text-align:left;">
+                  ✓ BTC breaks above $80k miner/MSTR cluster<br>
+                  ✓ Hash price recovers to $40+ (miners profitable)<br>
+                  ✓ Oil recedes below $85, geopolitics stabilize<br>
+                  ✓ ETF inflows resume consistently positive<br>
+                  ✓ MVRV recovers to 2.0–2.5 range
+                </div>
+              </div>
+
+              <div class="tgt bull">
+                <div class="tgt-lbl">Bull Case</div>
+                <div class="tgt-px">$150–200k</div>
+                <div class="tgt-prob" style="font-size:8px;margin-bottom:8px;">Standard Chartered · Nexo · Maple Finance range</div>
+                <div style="font-size:9px;color:var(--d1);line-height:1.7;text-align:left;">
+                  ✓ Oct 2025 was mid-cycle high (like Apr 2021)<br>
+                  ✓ Fed pivots / rate cuts resume<br>
+                  ✓ Sovereign wealth fund BTC buying confirmed<br>
+                  ✓ MVRV re-rates to 3.0+ (price ~$160k+)<br>
+                  ✓ Multi-signal convergence triggers at ~$55–65k dip
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Key levels -->
+            <div style="font-size:8px;color:var(--d2);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">Key On-Chain Levels — derived from verifiable data</div>
             <div class="mg2">
               <div>
-                <div style="font-size:9px;color:var(--g);margin-bottom:7px;font-weight:600;">▼ SUPPORT</div>
-                <div class="lrow"><span class="lrow-k">MSTR last buy</span><span class="lrow-v" style="color:var(--g);">$67,718</span></div>
-                <div class="lrow"><span class="lrow-k">LTH realized price</span><span class="lrow-v" style="color:var(--g);">~$48,387</span></div>
-                <div class="lrow"><span class="lrow-k">Efficient miner cost</span><span class="lrow-v" style="color:var(--g);">$34–43k</span></div>
-                <div class="lrow"><span class="lrow-k">200-week MA (est.)</span><span class="lrow-v" style="color:var(--g);">~$40–45k</span></div>
+                <div style="font-size:9px;color:var(--g);margin-bottom:7px;font-weight:600;">▼ SUPPORT — floors that have historically held</div>
+                <div class="lrow"><span class="lrow-k">Realized price (network cost basis)</span><span class="lrow-v" style="color:var(--g);">$54,229</span></div>
+                <div class="lrow"><span class="lrow-k">Power law bottom band (Bitbo)</span><span class="lrow-v" style="color:var(--g);">$55,723</span></div>
+                <div class="lrow"><span class="lrow-k">MSTR last buy (conviction floor)</span><span class="lrow-v" style="color:var(--g);">$71,902</span></div>
+                <div class="lrow"><span class="lrow-k">Efficient miner breakeven</span><span class="lrow-v" style="color:var(--g);">$34–43k</span></div>
+                <div class="lrow"><span class="lrow-k">Timmer bear support estimate</span><span class="lrow-v" style="color:var(--g);">$65–75k</span></div>
               </div>
               <div>
-                <div style="font-size:9px;color:var(--r);margin-bottom:7px;font-weight:600;">▲ RESISTANCE</div>
-                <div class="lrow"><span class="lrow-k">MSTR avg cost</span><span class="lrow-v" style="color:var(--r);">$75,644</span></div>
-                <div class="lrow"><span class="lrow-k">ETF avg basis ⚠est</span><span class="lrow-v" style="color:var(--r);">~$84,000</span></div>
-                <div class="lrow"><span class="lrow-k">Miner breakeven</span><span class="lrow-v" style="color:var(--r);">$77–88k</span></div>
-                <div class="lrow"><span class="lrow-k">Breakout target</span><span class="lrow-v" style="color:var(--a);">$90k+</span></div>
+                <div style="font-size:9px;color:var(--r);margin-bottom:7px;font-weight:600;">▲ RESISTANCE — overhead supply clusters</div>
+                <div class="lrow"><span class="lrow-k">MSTR avg cost basis</span><span class="lrow-v" style="color:var(--r);">$75,577</span></div>
+                <div class="lrow"><span class="lrow-k">Industry miner breakeven</span><span class="lrow-v" style="color:var(--r);">$77–88k</span></div>
+                <div class="lrow"><span class="lrow-k">ETF avg investor basis ⚠est</span><span class="lrow-v" style="color:var(--r);">~$84,000</span></div>
+                <div class="lrow"><span class="lrow-k">Key breakout level</span><span class="lrow-v" style="color:var(--a);">$90k+</span></div>
+                <div class="lrow"><span class="lrow-k">Previous ATH</span><span class="lrow-v" style="color:var(--a);">$126,277</span></div>
               </div>
             </div>
+
+            <div class="caveat" style="margin-top:12px;">
+              <strong>Why no probability %:</strong> Assigning 55% to base case and 25% to bull case implies a precision that doesn't exist. These are structurally different outcomes driven by macro, geopolitical, and on-chain variables none of us can weight accurately. The scenario conditions above are more useful — watch whether those checkboxes are ticking or unticking each week.
+            </div>
+
           </div>
         </div>
 
