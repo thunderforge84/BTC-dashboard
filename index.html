@@ -476,6 +476,9 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
       <div class="nav-item" onclick="navTo('monitor','s-onchain')">
         <span class="nav-icon">⬡</span>On-Chain Metrics
       </div>
+      <div class="nav-item" onclick="navTo('monitor','s-og')">
+        <span class="nav-icon">💎</span>OG Holder Behaviour
+      </div>
       <div class="nav-item" onclick="navTo('monitor','s-miners')">
         <span class="nav-icon">⛏</span>Miner Economics
       </div>
@@ -601,6 +604,102 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
                 <tr><td>Geopolitical / oil $91–103 (volatile)</td><td style="color:var(--d1);font-size:9px;">Strait of Hormuz blockade · WTI $91, Brent $95–103</td><td style="text-align:right;"><span class="bdg a">Watch</span></td></tr>
               </tbody>
             </table>
+          </div>
+        </div>
+
+        <!-- OG HOLDER BEHAVIOUR -->
+        <div class="sec" id="s-og">
+          <div class="sec-hd closed" onclick="toggleSec(this)">
+            <div class="sec-hd-left"><span class="sec-ic">💎</span><span class="sec-title">OG Holder Behaviour</span><span class="sec-tag">— are long-term holders selling or accumulating?</span></div>
+            <span class="sec-chev">▼</span>
+          </div>
+          <div class="sec-body" style="display:none;">
+
+            <!-- Verdict banner -->
+            <div style="display:flex;align-items:center;justify-content:space-between;background:var(--gd);border:1px solid rgba(39,174,96,0.25);border-radius:6px;padding:10px 14px;margin-bottom:14px;">
+              <div>
+                <div style="font-size:8px;letter-spacing:0.09em;text-transform:uppercase;color:var(--g);margin-bottom:3px;">Overall Verdict · Apr 15 2026</div>
+                <div style="font-family:var(--sans);font-size:14px;font-weight:700;color:var(--g);">Easing Distribution → Early Accumulation</div>
+                <div style="font-size:9px;color:var(--d1);margin-top:3px;">LTH selling pressure peaked at Feb lows · Now moderating · Not a top signal</div>
+              </div>
+              <span class="bdg g" style="font-size:9px;padding:4px 10px;">Bullish</span>
+            </div>
+
+            <!-- 4 metric cards -->
+            <div class="mg4" style="margin-bottom:14px;">
+              <div class="mc g">
+                <div class="mc-lbl">LTH Net Position</div>
+                <div class="mc-val g" style="font-size:13px;"><input class="e" id="e-lthnet" value="Recovering"/></div>
+                <div class="mc-sub">Still slightly −ve monthly but rising fast from Feb lows · Glassnode</div>
+                <div class="mc-trend" id="t-lthnet"></div>
+              </div>
+              <div class="mc g">
+                <div class="mc-lbl">Binary CDD (90d)</div>
+                <div class="mc-val g" style="font-size:13px;"><input class="e" id="e-cdd" value="Moderate"/></div>
+                <div class="mc-sub">Elevated at Oct ATH · Now cooling · Some spikes = UTXO consolidation not selling</div>
+                <div class="mc-trend" id="t-cdd"></div>
+              </div>
+              <div class="mc g">
+                <div class="mc-lbl">LTH-SOPR</div>
+                <div class="mc-val g" style="font-size:13px;"><input class="e" id="e-sopr" value="Drying up"/></div>
+                <div class="mc-sub">Profit-taking slowing · Historically signals market bottom approach · Checkonchain</div>
+                <div class="mc-trend" id="t-sopr"></div>
+              </div>
+              <div class="mc g">
+                <div class="mc-lbl">Revived Supply 7d</div>
+                <div class="mc-val g" style="font-size:13px;"><input class="e" id="e-revived" value="Quiet"/></div>
+                <div class="mc-sub">No major old coin movements this week · Whale Alert / Lookonchain</div>
+                <div class="mc-trend" id="t-revived"></div>
+              </div>
+            </div>
+
+            <!-- What each means -->
+            <div style="font-size:8px;color:var(--d2);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">How to read each signal</div>
+            <table class="tbl">
+              <thead><tr><th>Metric</th><th>Bullish reading</th><th>Bearish reading</th><th>Where to check</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight:500;">LTH Net Position</td>
+                  <td style="color:var(--g);font-size:9px;">Positive or recovering → OGs accumulating</td>
+                  <td style="color:var(--r);font-size:9px;">Deep negative → OGs offloading at scale</td>
+                  <td style="font-size:9px;color:var(--b);">glassnode.com (free) → LTH Net Position Change</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;">Binary CDD</td>
+                  <td style="color:var(--g);font-size:9px;">Low / quiet → old coins dormant, HODLing</td>
+                  <td style="color:var(--r);font-size:9px;">Sustained spikes → old coins moving en masse</td>
+                  <td style="font-size:9px;color:var(--b);">checkonchain.com → CDD · ⚠ some spikes = UTXO consolidation not selling</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;">LTH-SOPR</td>
+                  <td style="color:var(--g);font-size:9px;">&lt;1.0 or falling → OGs selling at loss or not selling</td>
+                  <td style="color:var(--r);font-size:9px;">Rising sharply above 1.0 → OGs taking large profits</td>
+                  <td style="font-size:9px;color:var(--b);">checkonchain.com → LTH SOPR</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;">Revived Supply</td>
+                  <td style="color:var(--g);font-size:9px;">Quiet → no dormant coins waking up</td>
+                  <td style="color:var(--r);font-size:9px;">Spiking → wallets dormant for years suddenly moving</td>
+                  <td style="font-size:9px;color:var(--b);">Whale Alert (t.me/whale_alert_io) · Lookonchain.com</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="sep"></div>
+
+            <!-- Context -->
+            <div style="font-size:8px;color:var(--d2);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">Current cycle context</div>
+            <div style="font-size:9px;color:var(--d1);line-height:1.8;">
+              <strong style="color:var(--tx);">What happened at the Oct 2025 ATH ($126k):</strong> LTHs distributed heavily into the rally — this is normal and expected. They sold into strength as they always do at cycle peaks. CDD spiked significantly.<br><br>
+              <strong style="color:var(--tx);">What happened Feb–Mar 2026 (BTC ~$60–72k):</strong> LTH selling accelerated briefly as price dropped, but profit-taking dried up fast — a classic exhaustion signal. LTH Net Position Change hit its most negative point then bounced hard.<br><br>
+              <strong style="color:var(--tx);">Where we are now (Apr 2026):</strong> LTHs have shifted from distribution back toward accumulation. <span style="color:var(--g);">This is bullish.</span> The smart money is buying the dip, not selling into it. Combined with MVRV 1.35, this confirms the accumulation thesis.<br><br>
+              <strong style="color:var(--a);">⚠ One caveat:</strong> CDD spikes in this cycle are harder to interpret because large ETF custodians (Coinbase, Fidelity) regularly consolidate UTXOs — this creates CDD spikes that look like OG selling but aren't. Always cross-check a CDD spike with Whale Alert to see if coins went to known exchange deposit addresses (bearish) or just reshuffled within custody (neutral).
+            </div>
+
+            <div class="caveat" style="margin-top:12px;">
+              <strong>Red flag to watch:</strong> If LTH Net Position Change turns sharply negative again AND CDD spikes AND coins route to exchange deposit addresses simultaneously — that's the triple confirmation that OGs are distributing into strength. That signal historically precedes cycle tops by 4–8 weeks. We are nowhere near that right now.
+            </div>
+
           </div>
         </div>
 
@@ -849,7 +948,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
               <div class="tl-item"><div class="tl-dot g"></div><div class="tl-date">Nov–Dec 2018 · BTC ~$3,200–3,500</div><div class="tl-ttl">Event #2 — ICO Bubble Collapse Bottom</div><div style="margin:5px 0;"><span class="sb-mv">MVRV 0.70</span><span class="sb-hs">Hashrate −30%</span><span class="sb-lt">LTH losses peak</span><span class="sb-ex">Exchange reserves low</span></div><div class="tl-body">MVRV 0.70 — entire network below aggregate cost basis. BTC/BCH hash war accelerated capitulation. Most well-documented accumulation event. Bottom Dec 15 2018 at $3,122.</div><div class="tl-rets"><span class="tl-ret r">90d: −10%</span><span class="tl-ret g">180d: +100%</span><span class="tl-ret g">12m: +245%</span><span class="tl-ret g">18m: +485%</span></div></div>
               <div class="tl-item"><div class="tl-dot g"></div><div class="tl-date">Mar 12–20, 2020 · BTC ~$3,800–5,800</div><div class="tl-ttl">Event #3 — COVID Crash</div><div style="margin:5px 0;"><span class="sb-mv">MVRV 0.88</span><span class="sb-hs">Miner cap</span><span class="sb-lt">SOPR &lt;1.0</span><span class="sb-ex">Exchange inflow reversal</span></div><div class="tl-body">BTC fell 60% in 48 hours. Signal lasted ~1 week — most retail missed it. Halving was 2 months away. Best single entry in modern Bitcoin history.</div><div class="tl-rets"><span class="tl-ret g">90d: +145%</span><span class="tl-ret g">180d: +290%</span><span class="tl-ret g">12m: +540%</span><span class="tl-ret g">18m: +1,100%</span></div></div>
               <div class="tl-item"><div class="tl-dot g"></div><div class="tl-date">Nov–Dec 2022 · BTC ~$15,500–18,000</div><div class="tl-ttl">Event #4 — FTX Collapse Bottom</div><div style="margin:5px 0;"><span class="sb-mv">MVRV 0.76</span><span class="sb-hs">Hashrate −20%</span><span class="sb-lt">LTH losses record</span><span class="sb-ex">Exchange reserves 5yr low</span></div><div class="tl-body">MVRV 0.76. Whales losing $337M/day. Hash rate −20%. Exchange reserves 5-year lows. Classic capitulation: last sellers gave up. Bottom Nov 21 2022 at $15,476.</div><div class="tl-rets"><span class="tl-ret a">90d: +50%</span><span class="tl-ret g">180d: +140%</span><span class="tl-ret g">12m: +210%</span><span class="tl-ret g">18m: +480%</span></div></div>
-              <div class="tl-item"><div class="tl-dot a"></div><div class="tl-date">April 2026 — Current</div><div class="tl-ttl" style="color:var(--a);">No convergence event</div><div class="tl-body">MVRV 2.1, hash price $33–34 (near but not at $28 floor), LTH losses $200M/day (elevated, not exhausted). Only post-halving timing window is active. A true multi-signal event needs BTC ~$50–65k to trigger remaining signals.</div></div>
+              <div class="tl-item"><div class="tl-dot a"></div><div class="tl-date">April 2026 — Current</div><div class="tl-ttl" style="color:var(--a);">Improving setup — not yet a convergence event</div><div class="tl-body">MVRV 1.35 (accumulation zone ✓), hash price $33 (approaching $28 floor), LTH losses $200M/day (elevated but easing), OG holders shifting from distribution → accumulation. Missing: LTH loss exhaustion and hash price capitulation. A drop to $55–65k would likely trigger full multi-signal convergence.</div></div>
             </div>
           </div>
         </div>
