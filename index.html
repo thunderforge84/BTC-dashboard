@@ -1155,18 +1155,33 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
               <span style="font-size:8px;color:var(--d2);font-weight:400;">updates every page load</span>
             </div>
             <table class="tbl" style="margin-bottom:10px;">
-              <thead><tr><th>Field</th><th>Value</th><th>What it means</th></tr></thead>
+              <thead><tr><th>Field</th><th>Value</th><th>Notes</th></tr></thead>
               <tbody>
                 <tr><td style="color:var(--d1);">Signal triggered</td><td style="color:var(--g);font-weight:600;">Feb 2026</td><td style="font-size:9px;color:var(--d1);">MVRV first crossed below 1.5 · accumulation zone entered</td></tr>
                 <tr><td style="color:var(--d1);">MVRV at signal</td><td style="color:var(--g);font-weight:600;">~1.35</td><td style="font-size:9px;color:var(--d1);">Same zone as Jan 2019, Jun 2022 · not a deep bottom</td></tr>
                 <tr><td style="color:var(--d1);">Reference price</td><td style="color:var(--g);font-weight:600;">~$74k</td><td style="font-size:9px;color:var(--d1);">Approx BTC price when signal zone was entered</td></tr>
                 <tr><td style="color:var(--d1);">Days since signal</td><td style="color:var(--g);font-weight:600;" id="daysActive">—</td><td style="font-size:9px;color:var(--d1);">Historical median time to +50% from similar entry: 3–6 months</td></tr>
-                <tr><td style="color:var(--d1);">Signal still valid?</td><td style="color:var(--g);font-weight:600;" id="signalValid">—</td><td style="font-size:9px;color:var(--d1);">Valid while MVRV stays below 1.5 · invalid if BTC reclaims $81k+</td></tr>
-                <tr><td style="color:var(--d1);">Thesis intact?</td><td style="color:var(--g);font-weight:600;">Yes</td><td style="font-size:9px;color:var(--d1);">MVRV 1.35 · Hash price near $28 floor · Post-halving month 12 · STH underwater</td></tr>
+                <tr>
+                  <td style="color:var(--d1);">Signal status</td>
+                  <td style="font-weight:600;" id="signalStatus">—</td>
+                  <td style="font-size:9px;" id="signalStatusDesc">—</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--d1);">Thesis</td>
+                  <td style="font-weight:600;" id="thesisIntact">—</td>
+                  <td style="font-size:9px;color:var(--d1);">Updates automatically from MVRV field + live price</td>
+                </tr>
               </tbody>
             </table>
+            <!-- Status key -->
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
+              <span style="font-size:8px;background:rgba(41,128,185,0.12);color:var(--b);padding:2px 8px;border-radius:3px;border:1px solid rgba(41,128,185,0.2);">🔵 Deepening — MVRV falling toward 1.0 · signal strengthening · hold or add</span>
+              <span style="font-size:8px;background:var(--gl);color:var(--g);padding:2px 8px;border-radius:3px;border:1px solid rgba(39,174,96,0.2);">🟢 Active — MVRV below 1.5 · window open · monitor weekly</span>
+              <span style="font-size:8px;background:var(--gl);color:var(--g);padding:2px 8px;border-radius:3px;border:1px solid rgba(39,174,96,0.2);">✅ Succeeded — MVRV above 1.5 · price above entry · thesis worked · watch sell levels</span>
+              <span style="font-size:8px;background:var(--rl);color:var(--r);padding:2px 8px;border-radius:3px;border:1px solid rgba(231,76,60,0.2);">⚠ Closed no confirmation — MVRV above 1.5 · price still below entry · zero historical precedent at 12m</span>
+            </div>
             <div style="font-size:8px;color:var(--d2);padding-top:8px;border-top:1px solid var(--ln);line-height:1.8;">
-              <strong style="color:var(--tx);">When does the thesis break?</strong> If MVRV climbs back above 1.5 without BTC making a new ATH, it means the accumulation window closed without a full signal. If LTH losses stay elevated above $100M/day for 3+ more months, capitulation hasn't happened yet and a deeper low is possible. Neither has occurred — thesis remains intact as of Apr 16 2026.
+              <strong style="color:var(--tx);">When does the thesis break?</strong> Only one scenario: MVRV climbs above 1.5 while BTC price is still below the ~$74k entry reference. That has never happened on a 12m horizon in the full historical record — but it's theoretically possible if this cycle is structurally different (Oct 2025 was a genuine top, not mid-cycle). Everything else — MVRV deepening toward 1.0, extended time in zone, short-term price drops — does not break the thesis. It either strengthens it or is noise.
             </div>
           </div>
         </div>
@@ -1451,6 +1466,7 @@ async function fetchPx() {
     document.getElementById('footTime').textContent = 'Refreshed ' + ts;
 
     buildChecklist(); // re-eval live-price dependent checks
+    updateEntryTracker(); // re-eval signal status with latest price
   } catch(e) {
     document.getElementById('sbPx').textContent = 'Error';
     document.getElementById('sbChg').textContent = 'Fetch failed — retry';
@@ -1647,26 +1663,68 @@ function initCharts() {
 }
 
 // ═══ LIVE ENTRY TRACKER ═══════════════════════════════════
+const ENTRY_DATE  = new Date('2026-02-01'); // when MVRV first crossed sub-1.5
+const ENTRY_MVRV  = 1.35;
+const ENTRY_PRICE = 74000; // approx BTC price at signal
+
 function updateEntryTracker() {
-  const signalDate = new Date('2026-02-01'); // Feb 2026 — when MVRV first crossed sub-1.5
   const today = new Date();
-  const days = Math.floor((today - signalDate) / (1000 * 60 * 60 * 24));
-  const daysEl = document.getElementById('daysActive');
-  const validEl = document.getElementById('signalValid');
+  const days  = Math.floor((today - ENTRY_DATE) / (1000*60*60*24));
+  const daysEl  = document.getElementById('daysActive');
+  const statusEl = document.getElementById('signalStatus');
+  const statusDescEl = document.getElementById('signalStatusDesc');
+  const thesisEl = document.getElementById('thesisIntact');
   if(daysEl) daysEl.textContent = days + ' days';
 
-  // Signal valid while MVRV < 1.5 (e-mvrv field)
   const mvrvEl = document.getElementById('e-mvrv');
-  if(validEl && mvrvEl) {
-    const mvrv = parseFloat(mvrvEl.value);
-    if(!isNaN(mvrv) && mvrv < 1.5) {
-      validEl.textContent = 'Yes — MVRV ' + mvrv + ' (below 1.5)';
-      validEl.style.color = 'var(--g)';
-    } else if(!isNaN(mvrv)) {
-      validEl.textContent = 'No — MVRV ' + mvrv + ' (above 1.5, window closed)';
-      validEl.style.color = 'var(--r)';
-    }
+  if(!mvrvEl || !statusEl) return;
+  const mvrv = parseFloat(mvrvEl.value);
+  if(isNaN(mvrv)) return;
+
+  // Determine status
+  let status, color, desc, thesis, thesisColor;
+
+  if(mvrv < 1.0) {
+    // Deepening — signal getting stronger
+    status = '🔵 Deepening';
+    color  = 'var(--b)';
+    desc   = 'MVRV ' + mvrv + ' — below network cost basis. Signal strengthening. Historically the strongest buy zone. Hold or add.';
+    thesis = 'Strengthening — deeper MVRV = higher historical returns';
+    thesisColor = 'var(--b)';
+  } else if(mvrv >= 1.0 && mvrv < 1.5) {
+    // Active — still in accumulation zone
+    status = '🟢 Active';
+    color  = 'var(--g)';
+    desc   = 'MVRV ' + mvrv + ' — accumulation zone intact. Window open. Monitor weekly.';
+    thesis = 'Intact — MVRV below 1.5, conditions unchanged';
+    thesisColor = 'var(--g)';
+  } else if(mvrv >= 1.5 && lastPx && lastPx > ENTRY_PRICE) {
+    // Succeeded — MVRV above 1.5 AND price higher than entry reference
+    status = '✅ Succeeded';
+    color  = 'var(--g)';
+    desc   = 'MVRV ' + mvrv + ' — signal worked. BTC recovered above entry reference (~$' + ENTRY_PRICE.toLocaleString() + '). Now monitor MVRV sell framework for exit signals.';
+    thesis = 'Complete — watch MVRV sell levels for staged reduction';
+    thesisColor = 'var(--g)';
+  } else if(mvrv >= 1.5 && lastPx && lastPx <= ENTRY_PRICE) {
+    // Closed without confirmation — MVRV above 1.5 but price still below entry
+    status = '⚠ Closed — no confirmation';
+    color  = 'var(--r)';
+    desc   = 'MVRV ' + mvrv + ' — window closed but BTC still below entry reference (~$' + ENTRY_PRICE.toLocaleString() + '). Zero historical precedent at sub-1.5 on 12m horizon — but watch for re-entry if MVRV drops back below 1.5.';
+    thesis = 'Broken — window closed without price recovery';
+    thesisColor = 'var(--r)';
+  } else {
+    // Fallback if lastPx not yet loaded
+    status = mvrv < 1.5 ? '🟢 Active' : '— Loading price...';
+    color  = mvrv < 1.5 ? 'var(--g)' : 'var(--d1)';
+    desc   = 'MVRV ' + mvrv;
+    thesis = mvrv < 1.5 ? 'Intact' : 'Loading...';
+    thesisColor = 'var(--d1)';
   }
+
+  statusEl.textContent = status;
+  statusEl.style.color = color;
+  if(statusDescEl) { statusDescEl.textContent = desc; statusDescEl.style.color = 'var(--d1)'; }
+  if(thesisEl) { thesisEl.textContent = thesis; thesisEl.style.color = thesisColor; }
 }
 
 // ═══ MVRV SELL LEVEL CALCULATOR ═══════════════════════════
@@ -1689,7 +1747,7 @@ function updateMvrvLevels() {
 
 // ═══ INIT ═════════════════════════════════════════════════
 // Version stamp — bump this string every update to force-clear old saved metric values
-const FILE_VERSION = '2026-04-16-v3';
+const FILE_VERSION = '2026-04-16-v4';
 const SK_VER = 'btcv4_version';
 if(load(SK_VER, null) !== FILE_VERSION) {
   // New file version detected — clear old metric values and prev baseline
