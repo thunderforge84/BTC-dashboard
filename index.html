@@ -1145,7 +1145,29 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
                 <tr><td>Geopolitical / Oil</td><td style="color:var(--d1);">Oil &lt; $85 = signal cleared</td><td style="color:var(--a);font-weight:600;">~$92 (easing)</td><td><span class="bdg a">Watch</span></td><td style="color:var(--d1);">Pulling back from $110+ · not cleared yet</td></tr>
               </tbody>
             </table>
-            <div class="caveat" style="margin-top:10px;"><strong>Bottom line (Apr 15):</strong> MVRV at 1.35 is now in the accumulation zone — this is a meaningful signal upgrade from neutral. Price is only 1.35× realized price ($54,229), close to historical buy territory. Hash price ($33) approaching $28 capitulation floor. Two signals now "close". A further BTC drop toward $54k would trigger MVRV sub-1.0 (deep buy). Current setup is more bullish than previously shown.</div>
+            <div class="caveat" style="margin-top:10px;"><strong>Bottom line (Apr 16):</strong> MVRV at 1.35 is now in the accumulation zone — this is a meaningful signal upgrade from neutral. Price is only 1.35× realized price ($54,229), close to historical buy territory. Hash price ($33) approaching $28 capitulation floor. Two signals now "close". A further BTC drop toward $54k would trigger MVRV sub-1.0 (deep buy). Current setup is more bullish than previously shown.</div>
+          </div>
+
+          <!-- LIVE ENTRY TRACKER -->
+          <div class="card" style="border:1px solid rgba(39,174,96,0.3);background:linear-gradient(135deg,rgba(39,174,96,0.04),transparent);">
+            <div class="card-title" style="display:flex;align-items:center;justify-content:space-between;">
+              <span>Live Signal Tracker</span>
+              <span style="font-size:8px;color:var(--d2);font-weight:400;">updates every page load</span>
+            </div>
+            <table class="tbl" style="margin-bottom:10px;">
+              <thead><tr><th>Field</th><th>Value</th><th>What it means</th></tr></thead>
+              <tbody>
+                <tr><td style="color:var(--d1);">Signal triggered</td><td style="color:var(--g);font-weight:600;">Feb 2026</td><td style="font-size:9px;color:var(--d1);">MVRV first crossed below 1.5 · accumulation zone entered</td></tr>
+                <tr><td style="color:var(--d1);">MVRV at signal</td><td style="color:var(--g);font-weight:600;">~1.35</td><td style="font-size:9px;color:var(--d1);">Same zone as Jan 2019, Jun 2022 · not a deep bottom</td></tr>
+                <tr><td style="color:var(--d1);">Reference price</td><td style="color:var(--g);font-weight:600;">~$74k</td><td style="font-size:9px;color:var(--d1);">Approx BTC price when signal zone was entered</td></tr>
+                <tr><td style="color:var(--d1);">Days since signal</td><td style="color:var(--g);font-weight:600;" id="daysActive">—</td><td style="font-size:9px;color:var(--d1);">Historical median time to +50% from similar entry: 3–6 months</td></tr>
+                <tr><td style="color:var(--d1);">Signal still valid?</td><td style="color:var(--g);font-weight:600;" id="signalValid">—</td><td style="font-size:9px;color:var(--d1);">Valid while MVRV stays below 1.5 · invalid if BTC reclaims $81k+</td></tr>
+                <tr><td style="color:var(--d1);">Thesis intact?</td><td style="color:var(--g);font-weight:600;">Yes</td><td style="font-size:9px;color:var(--d1);">MVRV 1.35 · Hash price near $28 floor · Post-halving month 12 · STH underwater</td></tr>
+              </tbody>
+            </table>
+            <div style="font-size:8px;color:var(--d2);padding-top:8px;border-top:1px solid var(--ln);line-height:1.8;">
+              <strong style="color:var(--tx);">When does the thesis break?</strong> If MVRV climbs back above 1.5 without BTC making a new ATH, it means the accumulation window closed without a full signal. If LTH losses stay elevated above $100M/day for 3+ more months, capitulation hasn't happened yet and a deeper low is possible. Neither has occurred — thesis remains intact as of Apr 16 2026.
+            </div>
           </div>
         </div>
 
@@ -1624,6 +1646,29 @@ function initCharts() {
   new Chart(document.getElementById('c-d12'), { type:'bar', data:{ labels:['< 0%','0–100%','100–300%','300–600%','>600%'], datasets:[{ data:[0,1,2,4,4], backgroundColor:['rgba(231,76,60,0.7)','rgba(230,126,34,0.5)','rgba(230,126,34,0.75)','rgba(39,174,96,0.65)','rgba(39,174,96,0.9)'], borderRadius:4 }] }, options:{ ...cfgBase, plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>c.parsed.y+' events'}} }, scales:{ ...cfgBase.scales, y:{ ticks:{color:tc,font:{family:FONT,size:9},stepSize:1}, grid:{color:gc}, border:{display:false} } } } });
 }
 
+// ═══ LIVE ENTRY TRACKER ═══════════════════════════════════
+function updateEntryTracker() {
+  const signalDate = new Date('2026-02-01'); // Feb 2026 — when MVRV first crossed sub-1.5
+  const today = new Date();
+  const days = Math.floor((today - signalDate) / (1000 * 60 * 60 * 24));
+  const daysEl = document.getElementById('daysActive');
+  const validEl = document.getElementById('signalValid');
+  if(daysEl) daysEl.textContent = days + ' days';
+
+  // Signal valid while MVRV < 1.5 (e-mvrv field)
+  const mvrvEl = document.getElementById('e-mvrv');
+  if(validEl && mvrvEl) {
+    const mvrv = parseFloat(mvrvEl.value);
+    if(!isNaN(mvrv) && mvrv < 1.5) {
+      validEl.textContent = 'Yes — MVRV ' + mvrv + ' (below 1.5)';
+      validEl.style.color = 'var(--g)';
+    } else if(!isNaN(mvrv)) {
+      validEl.textContent = 'No — MVRV ' + mvrv + ' (above 1.5, window closed)';
+      validEl.style.color = 'var(--r)';
+    }
+  }
+}
+
 // ═══ MVRV SELL LEVEL CALCULATOR ═══════════════════════════
 function updateMvrvLevels() {
   const rpEl = document.getElementById('e-rp');
@@ -1644,7 +1689,7 @@ function updateMvrvLevels() {
 
 // ═══ INIT ═════════════════════════════════════════════════
 // Version stamp — bump this string every update to force-clear old saved metric values
-const FILE_VERSION = '2026-04-16-v2';
+const FILE_VERSION = '2026-04-16-v3';
 const SK_VER = 'btcv4_version';
 if(load(SK_VER, null) !== FILE_VERSION) {
   // New file version detected — clear old metric values and prev baseline
@@ -1659,6 +1704,7 @@ loadData();
 loadSecs();
 updateTrends();
 updateMvrvLevels();
+updateEntryTracker();
 buildChecklist();
 // Restore last active tab
 const lastTab = load(SK_TABS, 'monitor');
