@@ -580,6 +580,12 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
       <div class="nav-item" onclick="navTo('monitor','s-og')">
         <span class="nav-icon">💎</span>OG Holder Behaviour
       </div>
+      <div class="nav-item" onclick="navTo('monitor','s-market')">
+        <span class="nav-icon">⟳</span>Market Structure
+      </div>
+      <div class="nav-item" onclick="navTo('monitor','s-exchange')">
+        <span class="nav-icon">⇄</span>Exchange Flow
+      </div>
       <div class="nav-item" onclick="navTo('monitor','s-miners')">
         <span class="nav-icon">⛏</span>Miner Economics
       </div>
@@ -671,7 +677,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
               <div class="mc r"><div class="mc-lbl">STH Realized Price</div><div class="mc-val r">$81,239</div><div class="mc-sub">Short-term holder avg cost</div></div>
               <div class="mc r"><div class="mc-lbl">STH MVRV</div><div class="mc-val r">0.90</div><div class="mc-sub">STH underwater · Bearish ST</div></div>
               <div class="mc g"><div class="mc-lbl">Power Law Bottom Band</div><div class="mc-val g">$55,723</div><div class="mc-sub">Key long-term floor · Bitbo</div></div>
-              <div class="mc b"><div class="mc-lbl">Last Updated</div><div class="mc-val b" style="font-size:13px;">Apr 15 2026</div><div class="mc-sub">Source: bitbo.io live</div></div>
+              <div class="mc p"><div class="mc-lbl">BTC / Gold Ratio</div><div class="mc-val p"><input class="e" id="e-btcgold" value="15.46 oz"/></div><div class="mc-sub">oz of gold per BTC · ATH ~38 oz · Bitbo</div><div class="mc-trend" id="t-btcgold"></div></div>
             </div>
             <div style="margin-bottom:6px;font-size:8px;color:var(--d2);letter-spacing:0.08em;text-transform:uppercase;">MVRV Cycle Zone</div>
             <div class="mvrv-bar">
@@ -809,6 +815,117 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
               <strong>Red flag to watch:</strong> If LTH Net Position Change turns sharply negative again AND CDD spikes AND coins route to exchange deposit addresses simultaneously — that's the triple confirmation that OGs are distributing into strength. That signal historically precedes cycle tops by 4–8 weeks. We are nowhere near that right now.
             </div>
 
+          </div>
+        </div>
+
+        <!-- MARKET STRUCTURE -->
+        <div class="sec" id="s-market">
+          <div class="sec-hd closed" onclick="toggleSec(this)">
+            <div class="sec-hd-left"><span class="sec-ic">⟳</span><span class="sec-title">Market Structure</span><span class="sec-tag">— derivatives sentiment · update weekly from CoinGlass</span></div>
+            <span class="sec-chev">▼</span>
+          </div>
+          <div class="sec-body" style="display:none;">
+
+            <div class="mg4" style="margin-bottom:14px;">
+              <div class="mc a">
+                <div class="mc-lbl">Funding Rate (30d avg)</div>
+                <div class="mc-val a"><input class="e" id="e-funding" value="Negative"/></div>
+                <div class="mc-sub">46 consecutive days negative · Apr 15 · CoinGlass</div>
+                <div class="mc-trend" id="t-funding"></div>
+              </div>
+              <div class="mc a">
+                <div class="mc-lbl">Open Interest Trend</div>
+                <div class="mc-val a"><input class="e" id="e-oi" value="Rising +12%"/></div>
+                <div class="mc-sub">OI up while funding negative = crowded shorts · CoinGlass</div>
+                <div class="mc-trend" id="t-oi"></div>
+              </div>
+              <div class="mc g">
+                <div class="mc-lbl">Long/Short Ratio</div>
+                <div class="mc-val g"><input class="e" id="e-ls" value="Short-biased"/></div>
+                <div class="mc-sub">Majority of leveraged market is short · CoinGlass</div>
+                <div class="mc-trend" id="t-ls"></div>
+              </div>
+              <div class="mc g">
+                <div class="mc-lbl">Market Sentiment</div>
+                <div class="mc-val g"><input class="e" id="e-sentiment" value="Crowded Short"/></div>
+                <div class="mc-sub">Contrarian buy signal — shorts get squeezed on recovery</div>
+              </div>
+            </div>
+
+            <div style="font-size:8px;color:var(--d2);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">How to read funding rate + open interest together</div>
+            <table class="tbl" style="margin-bottom:12px;">
+              <thead><tr><th>Funding Rate</th><th>Open Interest</th><th>What it means</th><th>Signal</th></tr></thead>
+              <tbody>
+                <tr><td style="color:var(--g);">Negative</td><td style="color:var(--g);">Rising</td><td style="font-size:9px;color:var(--d1);">New shorts being added aggressively — crowded short · squeeze risk high</td><td><span class="bdg g">Contrarian Buy</span></td></tr>
+                <tr><td style="color:var(--g);">Negative</td><td style="color:var(--d1);">Falling</td><td style="font-size:9px;color:var(--d1);">Shorts closing — capitulation fading, bottom may be in</td><td><span class="bdg g">Bullish</span></td></tr>
+                <tr><td style="color:var(--d1);">Neutral ~0%</td><td style="color:var(--d1);">Stable</td><td style="font-size:9px;color:var(--d1);">Market balanced · no strong directional lean</td><td><span class="bdg a">Neutral</span></td></tr>
+                <tr><td style="color:var(--r);">Positive</td><td style="color:var(--r);">Rising</td><td style="font-size:9px;color:var(--d1);">New longs being added — crowded long · liquidation risk high</td><td><span class="bdg r">Caution</span></td></tr>
+                <tr><td style="color:var(--r);">Strongly positive</td><td style="color:var(--r);">Very high</td><td style="font-size:9px;color:var(--d1);">Extreme leverage — historically precedes sharp corrections</td><td><span class="bdg r">Sell Signal</span></td></tr>
+              </tbody>
+            </table>
+
+            <div style="background:var(--gl);border:1px solid rgba(39,174,96,0.2);border-radius:6px;padding:10px 14px;">
+              <div style="font-size:8px;letter-spacing:0.09em;text-transform:uppercase;color:var(--g);margin-bottom:4px;">Current reading — Apr 16 2026</div>
+              <div style="font-size:12px;font-weight:600;color:var(--g);margin-bottom:4px;">Crowded Short — Contrarian Bullish</div>
+              <div style="font-size:9px;color:var(--d1);line-height:1.7;">Funding has been negative for 46 consecutive days — the longest streak since Nov 2022 (post-FTX bottom). Open interest is rising while funding stays negative, meaning fresh shorts are being added at $74k. The last two times this exact setup appeared, both resolved with violent upside squeezes within weeks. The market is maximally bearish at a level where MVRV says accumulate. That combination is historically rare and constructive.</div>
+            </div>
+
+            <div class="caveat" style="margin-top:10px;"><strong>Source:</strong> CoinGlass (coinglass.com) → Funding Rate tab. Free, no account. Update the fields above weekly — takes 60 seconds. Funding rate: note whether positive, negative, or neutral + approx magnitude. OI trend: rising, falling, or stable vs prior week.</div>
+          </div>
+        </div>
+
+        <!-- EXCHANGE FLOW -->
+        <div class="sec" id="s-exchange">
+          <div class="sec-hd closed" onclick="toggleSec(this)">
+            <div class="sec-hd-left"><span class="sec-ic">⇄</span><span class="sec-title">Exchange Flow</span><span class="sec-tag">— supply squeeze indicator · update weekly from CryptoQuant</span></div>
+            <span class="sec-chev">▼</span>
+          </div>
+          <div class="sec-body" style="display:none;">
+
+            <div class="mg4" style="margin-bottom:14px;">
+              <div class="mc g">
+                <div class="mc-lbl">Exchange Reserve</div>
+                <div class="mc-val g"><input class="e" id="e-exres" value="~2.2M BTC"/></div>
+                <div class="mc-sub">7-year low · structural supply squeeze · CryptoQuant</div>
+                <div class="mc-trend" id="t-exres"></div>
+              </div>
+              <div class="mc g">
+                <div class="mc-lbl">30d Netflow</div>
+                <div class="mc-val g"><input class="e" id="e-exflow" value="−48,200 BTC"/></div>
+                <div class="mc-sub">Net outflow = accumulation · Mar–Apr 2026 · CryptoQuant</div>
+                <div class="mc-trend" id="t-exflow"></div>
+              </div>
+              <div class="mc g">
+                <div class="mc-lbl">Whale Accumulation</div>
+                <div class="mc-val g"><input class="e" id="e-whale" value="+270k BTC"/></div>
+                <div class="mc-sub">1,000+ BTC wallets · 30d · largest since 2013</div>
+                <div class="mc-trend" id="t-whale"></div>
+              </div>
+              <div class="mc g">
+                <div class="mc-lbl">Reserve Trend</div>
+                <div class="mc-val g"><input class="e" id="e-extrend" value="Falling"/></div>
+                <div class="mc-sub">Consistent outflows for 6+ months · bullish structural</div>
+              </div>
+            </div>
+
+            <div style="font-size:8px;color:var(--d2);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">How to read exchange reserve</div>
+            <table class="tbl" style="margin-bottom:12px;">
+              <thead><tr><th>Reserve level</th><th>Trend</th><th>What it means</th><th>Signal</th></tr></thead>
+              <tbody>
+                <tr><td style="color:var(--g);">Multi-year low</td><td style="color:var(--g);">Falling</td><td style="font-size:9px;color:var(--d1);">BTC leaving exchanges consistently — holders accumulating, supply squeeze structural</td><td><span class="bdg g">Bullish</span></td></tr>
+                <tr><td style="color:var(--d1);">Stable</td><td style="color:var(--d1);">Flat</td><td style="font-size:9px;color:var(--d1);">No strong directional flow — market in balance</td><td><span class="bdg a">Neutral</span></td></tr>
+                <tr><td style="color:var(--r);">Rising sharply</td><td style="color:var(--r);">Spiking</td><td style="font-size:9px;color:var(--d1);">Large BTC deposits to exchanges — holders preparing to sell</td><td><span class="bdg r">Bearish</span></td></tr>
+                <tr><td style="color:var(--r);">Spike + price drop</td><td style="color:var(--r);">Correlated</td><td style="font-size:9px;color:var(--d1);">Confirmed distribution — selling pressure materialising</td><td><span class="bdg r">Strong Sell Signal</span></td></tr>
+              </tbody>
+            </table>
+
+            <div style="background:var(--gl);border:1px solid rgba(39,174,96,0.2);border-radius:6px;padding:10px 14px;">
+              <div style="font-size:8px;letter-spacing:0.09em;text-transform:uppercase;color:var(--g);margin-bottom:4px;">Current reading — Apr 16 2026</div>
+              <div style="font-size:12px;font-weight:600;color:var(--g);margin-bottom:4px;">Supply Squeeze — Structurally Bullish</div>
+              <div style="font-size:9px;color:var(--d1);line-height:1.7;">Exchange reserves at 7-year lows with 48,200 BTC net outflow in the past 30 days. On March 7 alone, a record 32,000 BTC left exchanges in a single session. Whale wallets (1,000+ BTC) accumulated 270,000 BTC in 30 days — the largest monthly whale accumulation since 2013. This is the structural floor under price: available sell-side supply is at historic lows while large holders are absorbing every dip.</div>
+            </div>
+
+            <div class="caveat" style="margin-top:10px;"><strong>Source:</strong> CryptoQuant (cryptoquant.com) → Exchange Reserve chart. Free tier, no account needed. Update reserve number and 30d netflow weekly. Takes 2 minutes. CoinGlass (coinglass.com/Balance) also shows exchange BTC balances by exchange.</div>
           </div>
         </div>
 
@@ -1372,14 +1489,19 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
           <div style="font-size:9px;color:var(--d1);line-height:1.9;">
             <strong style="color:var(--tx);">Every Sunday, paste this into Claude (claude.ai) — stay in the same thread:</strong><br><br>
             <div style="background:var(--bg3);border:1px solid var(--ln2);border-radius:5px;padding:10px 12px;margin:6px 0;font-size:9px;color:var(--a);line-height:1.8;">
-              Update my BTC dashboard at https://thunderforge84.github.io/BTC-dashboard/<br>
-              1. Fetch https://bitbo.io/ for all live numbers (MVRV, realized price, STH MVRV, hash price, hashrate, ETF holdings, MSTR, oil)<br>
-              2. Search for latest MSTR/Strategy 8-K filing this week<br>
-              3. Search for latest Luxor Hashrate Index weekly roundup<br>
-              4. Search for any new dormant wallet movements this week<br>
-              5. Give me a new index.html ready to upload to GitHub
+              Update my BTC dashboard at https://thunderforge84.github.io/BTC-dashboard/<br><br>
+              Fetch and update ALL of the following:<br>
+              1. https://bitbo.io/ — MVRV, realized price, STH MVRV, STH realized price, hash price, hashrate, ETF total holdings, MSTR holdings, ATH, BTC/Gold ratio, power law bottom band<br>
+              2. https://oilpriceapi.com/live/wti-crude-oil-price — WTI live price (Bitbo lags — always cross-check)<br>
+              3. SEC EDGAR CIK 0001050446 — latest MSTR 8-K: BTC held, avg cost, last buy date/price/amount<br>
+              4. https://hashrateindex.com — latest Luxor weekly hash price roundup<br>
+              5. CoinGlass — BTC funding rate (positive/negative/neutral), open interest trend (rising/falling/stable), long/short bias<br>
+              6. CryptoQuant — exchange reserve (total BTC on exchanges), 30d netflow direction, whale accumulation<br>
+              7. Whale Alert / Lookonchain — any new dormant wallet events this week<br>
+              8. Any major analyst price target updates this week<br><br>
+              Give me a new index.html ready to upload to GitHub. Do not redesign anything.
             </div>
-            Then: GitHub → index.html → pencil icon → Ctrl+A → paste → Commit changes. Done in under 5 minutes total.
+            Then: GitHub → index.html → pencil icon → Ctrl+A → paste → Commit changes. Done in under 5 minutes.
           </div>
         </div>
       </div>
@@ -1630,7 +1752,10 @@ function updateTrends() {
   const pairs = [
     ['e-mvrv','t-mvrv'],['e-lth','t-lth'],['e-lthloss','t-lthloss'],
     ['e-hash','t-hash'],['e-hrate','t-hrate'],['e-miner','t-miner'],
-    ['e-etf7','t-etf7'],['e-etfhld','t-etfhld'],['e-mbtc','t-mbtc'],['e-mcost','t-mcost']
+    ['e-etf7','t-etf7'],['e-etfhld','t-etfhld'],['e-mbtc','t-mbtc'],['e-mcost','t-mcost'],
+    ['e-funding','t-funding'],['e-oi','t-oi'],['e-ls','t-ls'],
+    ['e-exres','t-exres'],['e-exflow','t-exflow'],['e-whale','t-whale'],
+    ['e-btcgold','t-btcgold']
   ];
   pairs.forEach(([id,tid]) => {
     const el=document.getElementById(id), tel=document.getElementById(tid);
@@ -1747,7 +1872,7 @@ function updateMvrvLevels() {
 
 // ═══ INIT ═════════════════════════════════════════════════
 // Version stamp — bump this string every update to force-clear old saved metric values
-const FILE_VERSION = '2026-04-16-v4';
+const FILE_VERSION = '2026-04-16-v6';
 const SK_VER = 'btcv4_version';
 if(load(SK_VER, null) !== FILE_VERSION) {
   // New file version detected — clear old metric values and prev baseline
