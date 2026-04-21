@@ -1015,13 +1015,13 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
           </div>
           <div class="sec-body" style="display:none;">
             <div class="mg4">
-              <div class="mc a"><div class="mc-lbl">BTC Held</div><div class="mc-val a"><input class="e" id="e-mbtc" value="780,897"/></div><div class="mc-sub">3.7% of all BTC · Apr 13</div><div class="mc-trend" id="t-mbtc"></div></div>
-              <div class="mc r"><div class="mc-lbl">Avg Cost Basis</div><div class="mc-val r"><input class="e" id="e-mcost" value="$75,577"/></div><div class="mc-sub">Currently underwater</div><div class="mc-trend" id="t-mcost"></div></div>
-              <div class="mc n"><div class="mc-lbl">Total Invested</div><div class="mc-val n"><input class="e" id="e-mtot" value="~$59.02B"/></div><div class="mc-sub">Equity + debt funded</div></div>
-              <div class="mc g"><div class="mc-lbl">Last Buy</div><div class="mc-val g" style="font-size:12px;"><input class="e" id="e-mlast" value="Apr 6–12 @ $71,902"/></div><div class="mc-sub">13,927 BTC acquired</div></div>
+              <div class="mc a"><div class="mc-lbl">BTC Held</div><div class="mc-val a"><input class="e" id="e-mbtc" value="815,061"/></div><div class="mc-sub">3.88% of all BTC · Apr 21</div><div class="mc-trend" id="t-mbtc"></div></div>
+              <div class="mc r"><div class="mc-lbl">Avg Cost Basis</div><div class="mc-val r"><input class="e" id="e-mcost" value="$75,527"/></div><div class="mc-sub">Near breakeven · ~$76k vs $75,527</div><div class="mc-trend" id="t-mcost"></div></div>
+              <div class="mc n"><div class="mc-lbl">Total Invested</div><div class="mc-val n"><input class="e" id="e-mtot" value="~$61.56B"/></div><div class="mc-sub">Equity + debt funded</div></div>
+              <div class="mc g"><div class="mc-lbl">Last Buy</div><div class="mc-val g" style="font-size:12px;"><input class="e" id="e-mlast" value="Apr 13–19 @ $74,395"/></div><div class="mc-sub">34,164 BTC acquired · largest 2026 buy</div></div>
             </div>
             <div id="mstr-prose" style="font-size:9px;color:var(--d1);line-height:1.75;border-top:1px solid var(--ln);padding-top:10px;">
-              At ~$74k, MSTR is <span style="color:var(--r);">below</span> their avg cost of $75,577 — still underwater. Latest buy of 13,927 BTC at $71,902 (Apr 6–12) shows continued conviction at dip prices. The <span style="color:var(--a);">$75–84k cluster</span> (MSTR cost + ETF avg investor basis) remains the key overhead resistance zone to break.
+              At ~$76k, MSTR is <span style="color:var(--g);">above</span> their avg cost of $75,527 — now in profit. Largest 2026 buy: 34,164 BTC at $74,395 (Apr 13–19) shows continued conviction at dip prices. MSTR just crossed back into profit for the first time since late 2025. The <span style="color:var(--a);">$80–84k cluster</span> (ETF avg investor basis) is the next key overhead resistance zone.
             </div>
           </div>
         </div>
@@ -1911,7 +1911,7 @@ function updateDynamicText() {
     const lastBuy = mlastEl.value;
     const px = lastPx ? ('$' + Math.round(lastPx/1000) + 'k') : '~$74k';
     const underwater = lastPx && parseFloat(cost.replace(/[^0-9.]/g,'')) > lastPx;
-    mstrProseEl.innerHTML = `At ${px}, MSTR is <span style="color:var(--${underwater?'r':'g'});">${underwater?'below':'above'}</span> their avg cost of ${cost} — ${underwater?'still underwater':'in profit'}. Latest buy ${lastBuy} shows continued conviction at dip prices. The <span style="color:var(--a);">$75–84k cluster</span> (MSTR cost + ETF avg investor basis) remains the key overhead resistance zone to break.`;
+    mstrProseEl.innerHTML = `At ${px}, MSTR is <span style="color:var(--${underwater?'r':'g'});">${underwater?'below':'above'}</span> their avg cost of ${cost} — ${underwater?'underwater':'in profit'}. Latest buy: ${lastBuy} — largest single-week purchase of 2026. At this pace Strategy could surpass Satoshi's estimated BTC holdings by Sep 2026. The <span style="color:var(--a);">$80–84k cluster</span> (ETF avg investor basis) is the next overhead resistance zone.`;
   }
 
   // BTC/Gold ratio — auto-calculates from gold price field + live BTC price
@@ -1959,11 +1959,11 @@ function updateMvrvLevels() {
 
 // ═══ INIT ═════════════════════════════════════════════════
 // ── Single date stamp — change ONLY this line each weekly update ──
-const LAST_UPDATED = 'Apr 20 2026';
+const LAST_UPDATED = 'Apr 21 2026';
 // ─────────────────────────────────────────────────────────────────
 
 // Version stamp — bump this string every update to force-clear old saved metric values
-const FILE_VERSION = '2026-04-20-v1';
+const FILE_VERSION = '2026-04-21-v1';
 const SK_VER = 'btcv4_version';
 if(load(SK_VER, null) !== FILE_VERSION) {
   try { localStorage.removeItem(SK); } catch(e){}
