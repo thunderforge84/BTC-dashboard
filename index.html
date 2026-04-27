@@ -872,23 +872,234 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     <div id="tab-backtest" class="tab-panel">
       <div class="tab-inner">
         <div class="pg-title">Signal Backtest</div>
-        <div class="pg-sub">Historical performance of each signal across all Bitcoin cycles. 4 complete cycles · 8 MVRV events · 4 multi-signal convergences. Last updated: <span class="lu"></span>.</div>
-        <div class="discl"><strong>⚠ Statistical disclaimer:</strong> Bitcoin has only 4 complete halving cycles. MVRV sub-1.5 events: ~8 distinct periods. Multi-signal convergences: only 4 confirmed. These are pattern observations, not statistically significant backtests. Use as context, not as a trading system.</div>
+        <div class="pg-sub">Historical performance of each signal across all Bitcoin cycles. All data from public sources — no Glassnode subscription required. 4 complete cycles · 8 MVRV events · 4 multi-signal convergences. Last updated: <span class="lu"></span>.</div>
 
-        <div class="card" style="border:1px solid rgba(39,174,96,0.3);background:linear-gradient(135deg,rgba(39,174,96,0.04),transparent);">
-          <div class="card-title" style="display:flex;align-items:center;justify-content:space-between;">
-            <span>Live Signal Tracker</span>
-            <span style="font-size:8px;color:var(--d2);font-weight:400;">updates every page load</span>
+        <div class="discl"><strong>⚠ Statistical disclaimer:</strong> Bitcoin has only 4 complete halving cycles. MVRV sub-1.5 events: ~8 distinct periods. Multi-signal convergences: only 4 confirmed. These are pattern observations, not statistically significant backtests. "100% hit rate" on 4 data points is not evidence of durable edge. Use as context, not as a trading system.</div>
+
+        <div class="subtab-bar">
+          <button class="subtab active" onclick="showSub(this,'bt-overview')">Overview</button>
+          <button class="subtab" onclick="showSub(this,'bt-mvrv')">MVRV History</button>
+          <button class="subtab" onclick="showSub(this,'bt-halving')">Halving Cycles</button>
+          <button class="subtab" onclick="showSub(this,'bt-multi')">Multi-Signal Events</button>
+          <button class="subtab" onclick="showSub(this,'bt-returns')">Return Distribution</button>
+          <button class="subtab" onclick="showSub(this,'bt-limits')">Limitations</button>
+        </div>
+
+        <!-- OVERVIEW -->
+        <div id="bt-overview" class="subpanel active">
+          <div class="mg4" style="margin-bottom:14px;">
+            <div class="mc g"><div class="mc-lbl">MVRV &lt;1.5 hit rate</div><div class="mc-val g">8/8</div><div class="mc-sub">All profitable at 12m · avg +312%</div></div>
+            <div class="mc a"><div class="mc-lbl">Multi-signal events</div><div class="mc-val a">4 total</div><div class="mc-sub">All preceded 300%+ within 18m</div></div>
+            <div class="mc b"><div class="mc-lbl">Post-halving 12m avg</div><div class="mc-val b">+540%</div><div class="mc-sub">Excl. 2012. 2024 = +31% (weakest)</div></div>
+            <div class="mc r"><div class="mc-lbl">Worst 90d after signal</div><div class="mc-val r">−46%</div><div class="mc-sub">Mar 2020 entry (COVID crash)</div></div>
           </div>
-          <table class="tbl" style="margin-bottom:10px;">
-            <thead><tr><th>Field</th><th>Value</th><th>Notes</th></tr></thead>
-            <tbody>
-              <tr><td style="color:var(--d1);">Signal triggered</td><td style="color:var(--g);font-weight:600;">Feb 2026</td><td style="font-size:9px;color:var(--d1);">MVRV first crossed below 1.5 · accumulation zone entered</td></tr>
-              <tr><td style="color:var(--d1);">Days since signal</td><td style="color:var(--g);font-weight:600;" id="daysActive">—</td><td style="font-size:9px;color:var(--d1);">Historical median time to +50% from similar entry: 3–6 months</td></tr>
-              <tr><td style="color:var(--d1);">Signal status</td><td style="font-weight:600;" id="signalStatus">—</td><td style="font-size:9px;" id="signalStatusDesc">—</td></tr>
-              <tr><td style="color:var(--d1);">Thesis</td><td style="font-weight:600;" id="thesisIntact">—</td><td style="font-size:9px;color:var(--d1);">Updates automatically from MVRV field + live price</td></tr>
-            </tbody>
-          </table>
+          <div class="card">
+            <div class="card-title">Forward Return Heatmap by Signal Type</div>
+            <div class="hm-row" style="margin-bottom:7px;">
+              <div></div><div class="hm-hdr">90d</div><div class="hm-hdr">180d</div><div class="hm-hdr">365d</div><div class="hm-hdr">18m</div><div class="hm-hdr">Hit Rate</div>
+            </div>
+            <div class="hm-row"><div class="hm-lbl">MVRV &lt;1.5</div><div class="hm-cell h2">+18%</div><div class="hm-cell h3">+89%</div><div class="hm-cell h4">+312%</div><div class="hm-cell h4">+580%</div><div class="hm-cell h4">8/8</div></div>
+            <div class="hm-row"><div class="hm-lbl">MVRV &lt;1.0</div><div class="hm-cell h1">+4%</div><div class="hm-cell h3">+118%</div><div class="hm-cell h4">+428%</div><div class="hm-cell h4">+790%</div><div class="hm-cell h4">5/5</div></div>
+            <div class="hm-row"><div class="hm-lbl">Halving day</div><div class="hm-cell h2">+14%</div><div class="hm-cell h3">+52%</div><div class="hm-cell h3">+182%</div><div class="hm-cell h4">+462%</div><div class="hm-cell h4">3/3*</div></div>
+            <div class="hm-row"><div class="hm-lbl">Miner capitulation</div><div class="hm-cell h0">−12%</div><div class="hm-cell h2">+38%</div><div class="hm-cell h3">+195%</div><div class="hm-cell h4">+410%</div><div class="hm-cell h3">3/4</div></div>
+            <div class="hm-row"><div class="hm-lbl">3+ signals firing</div><div class="hm-cell h3">+52%</div><div class="hm-cell h4">+148%</div><div class="hm-cell h4">+410%</div><div class="hm-cell h4">+820%</div><div class="hm-cell h4">4/4</div></div>
+            <div class="caveat">*2024 halving not complete. 12m return = +31%, weakest on record. Excluded from averages.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Current Position vs Historical Signal Map (April 2026)</div>
+            <table class="tbl">
+              <thead><tr><th>Signal</th><th>Trigger Level</th><th>Current</th><th>Status</th><th>Hist. 12m Return</th></tr></thead>
+              <tbody>
+                <tr><td>MVRV Ratio</td><td style="color:var(--d1);">&lt;1.5 buy · &lt;1.0 deep buy</td><td style="color:var(--g);font-weight:600;">1.43 ✓</td><td><span class="bdg g">CLOSE to trigger</span></td><td class="rv">+312%</td></tr>
+                <tr><td>Hash Price</td><td style="color:var(--d1);">≤$28/PH/day capitulation</td><td style="color:var(--a);font-weight:600;">$37</td><td><span class="bdg a">Near trigger</span></td><td class="rv">+195%</td></tr>
+                <tr><td>LTH Losses</td><td style="color:var(--d1);">&lt;$25M/day exhaustion</td><td style="color:var(--r);font-weight:600;">~$200M/day</td><td><span class="bdg r">Not triggered</span></td><td class="rv">+380%</td></tr>
+                <tr><td>Price vs LTH Realized ($54,243)</td><td style="color:var(--d1);">Price ≈ realized price</td><td style="color:var(--a);font-weight:600;">1.43× above</td><td><span class="bdg a">Close</span></td><td class="rv">+428%</td></tr>
+                <tr><td>Post-Halving Timing</td><td style="color:var(--d1);">Month 12–18 post-halving</td><td style="color:var(--g);font-weight:600;"><span class="post-halving-month">Month 12</span></td><td><span class="bdg g">In window</span></td><td style="color:var(--d1);">Peak historically here</td></tr>
+                <tr><td>ETF Flows</td><td style="color:var(--d1);">No baseline (Jan 2024 launch)</td><td style="color:var(--b);font-weight:600;">+$824M/wk · 4th wk</td><td><span class="bdg b">No backtest</span></td><td style="color:var(--d1);">Insufficient history</td></tr>
+                <tr><td>Whale Accumulation Regime</td><td style="color:var(--d1);">4wk &gt; 12wk × 1.15 = accel</td><td style="color:var(--d1);font-weight:600;">⚪ STEADY</td><td><span class="bdg n">Cooled from accel</span></td><td style="color:var(--d1);">No formal backtest</td></tr>
+                <tr><td>Geopolitical / Oil</td><td style="color:var(--d1);">Oil &lt; $85 = signal cleared</td><td style="color:var(--r);font-weight:600;">~$95 (Hormuz still closed)</td><td><span class="bdg a">Watch</span></td><td style="color:var(--d1);">Above $85 threshold · risk-off</td></tr>
+              </tbody>
+            </table>
+            <div class="caveat" style="margin-top:10px;"><strong>Bottom line (<span class="lu"></span>):</strong> MVRV at 1.43 is firmly in the accumulation zone. Price is only 1.43× realized price ($54,243), close to historical buy territory. Hash price ($37) approaching $28 capitulation floor. ETF inflows running 4 consecutive positive weeks at $824M/wk. Whale regime cooled from accelerating to steady. A drop toward $54k would trigger MVRV sub-1.0 (deep buy). Current setup remains constructive but not yet at peak conviction.</div>
+          </div>
+
+          <!-- LIVE ENTRY TRACKER -->
+          <div class="card" style="border:1px solid rgba(39,174,96,0.3);background:linear-gradient(135deg,rgba(39,174,96,0.04),transparent);">
+            <div class="card-title" style="display:flex;align-items:center;justify-content:space-between;">
+              <span>Live Signal Tracker</span>
+              <span style="font-size:8px;color:var(--d2);font-weight:400;">updates every page load</span>
+            </div>
+            <table class="tbl" style="margin-bottom:10px;">
+              <thead><tr><th>Field</th><th>Value</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td style="color:var(--d1);">Signal triggered</td><td style="color:var(--g);font-weight:600;">Feb 2026</td><td style="font-size:9px;color:var(--d1);">MVRV first crossed below 1.5 · accumulation zone entered</td></tr>
+                <tr><td style="color:var(--d1);">MVRV at signal</td><td style="color:var(--g);font-weight:600;">~1.35</td><td style="font-size:9px;color:var(--d1);">Same zone as Jan 2019, Jun 2022 · not a deep bottom</td></tr>
+                <tr><td style="color:var(--d1);">Reference price</td><td style="color:var(--g);font-weight:600;">~$74k</td><td style="font-size:9px;color:var(--d1);">Approx BTC price when signal zone was entered</td></tr>
+                <tr><td style="color:var(--d1);">Days since signal</td><td style="color:var(--g);font-weight:600;" id="daysActive">—</td><td style="font-size:9px;color:var(--d1);">Historical median time to +50% from similar entry: 3–6 months</td></tr>
+                <tr>
+                  <td style="color:var(--d1);">Signal status</td>
+                  <td style="font-weight:600;" id="signalStatus">—</td>
+                  <td style="font-size:9px;" id="signalStatusDesc">—</td>
+                </tr>
+                <tr>
+                  <td style="color:var(--d1);">Thesis</td>
+                  <td style="font-weight:600;" id="thesisIntact">—</td>
+                  <td style="font-size:9px;color:var(--d1);">Updates automatically from MVRV field + live price</td>
+                </tr>
+              </tbody>
+            </table>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
+              <span style="font-size:8px;background:rgba(41,128,185,0.12);color:var(--b);padding:2px 8px;border-radius:3px;border:1px solid rgba(41,128,185,0.2);">🔵 Deepening — MVRV falling toward 1.0 · signal strengthening · hold or add</span>
+              <span style="font-size:8px;background:var(--gl);color:var(--g);padding:2px 8px;border-radius:3px;border:1px solid rgba(39,174,96,0.2);">🟢 Active — MVRV below 1.5 · window open · monitor weekly</span>
+              <span style="font-size:8px;background:var(--gl);color:var(--g);padding:2px 8px;border-radius:3px;border:1px solid rgba(39,174,96,0.2);">✅ Succeeded — MVRV above 1.5 · price above entry · thesis worked · watch sell levels</span>
+              <span style="font-size:8px;background:var(--rl);color:var(--r);padding:2px 8px;border-radius:3px;border:1px solid rgba(231,76,60,0.2);">⚠ Closed no confirmation — MVRV above 1.5 · price still below entry · zero historical precedent at 12m</span>
+            </div>
+            <div style="font-size:8px;color:var(--d2);padding-top:8px;border-top:1px solid var(--ln);line-height:1.8;">
+              <strong style="color:var(--tx);">When does the thesis break?</strong> Only one scenario: MVRV climbs above 1.5 while BTC price is still below the ~$74k entry reference. That has never happened on a 12m horizon in the full historical record — but it's theoretically possible if this cycle is structurally different (Oct 2025 was a genuine top, not mid-cycle). Everything else — MVRV deepening toward 1.0, extended time in zone, short-term price drops — does not break the thesis. It either strengthens it or is noise.
+            </div>
+          </div>
+        </div>
+
+        <!-- MVRV -->
+        <div id="bt-mvrv" class="subpanel">
+          <div class="card">
+            <div class="card-title">MVRV &lt;1.5 — All Historical Entry Points</div>
+            <table class="tbl">
+              <thead><tr><th>Period</th><th>MVRV Low</th><th>Entry Price</th><th>90d</th><th>180d</th><th>12m</th><th>18m</th><th>Note</th></tr></thead>
+              <tbody>
+                <tr><td>Jan–Aug 2015</td><td style="color:var(--g);">0.54</td><td style="font-weight:600;">$170–230</td><td class="ra">−15%</td><td class="ro">+50%</td><td class="rv">+185%</td><td class="rv">+620%</td><td style="font-size:9px;color:var(--d1);">Bottomed Jan, stayed low all year</td></tr>
+                <tr><td>Nov–Dec 2018</td><td style="color:var(--g);">0.70</td><td style="font-weight:600;">$3,200–4,000</td><td class="rb">−20%</td><td class="rv">+60%</td><td class="rv">+245%</td><td class="rv">+485%</td><td style="font-size:9px;color:var(--d1);">BTC/BCH hash war accelerated capitulation</td></tr>
+                <tr><td>Jan–Apr 2019</td><td style="color:var(--a);">0.90–1.2</td><td style="font-weight:600;">$3,500–4,200</td><td class="rv">+120%</td><td class="rv">+220%</td><td class="rv">+310%</td><td class="rv">+390%</td><td style="font-size:9px;color:var(--d1);">Strong bounce from 2018 bottom</td></tr>
+                <tr><td>Mar 2020</td><td style="color:var(--g);">0.88</td><td style="font-weight:600;">$3,800–5,800</td><td class="rv">+145%</td><td class="rv">+290%</td><td class="rv">+540%</td><td class="rv">+1,100%</td><td style="font-size:9px;color:var(--d1);">COVID crash — best modern entry</td></tr>
+                <tr><td>Jun–Jul 2021</td><td style="color:var(--a);">1.2–1.4</td><td style="font-weight:600;">$29,000–35,000</td><td class="rv">+110%</td><td class="rv">+90%</td><td class="ro">+55%</td><td class="rb">−30%</td><td style="font-size:9px;color:var(--d1);">Mid-cycle dip — 18m hurt by 2022 bear</td></tr>
+                <tr><td>Jun–Dec 2022</td><td style="color:var(--g);">0.76</td><td style="font-weight:600;">$15,500–20,000</td><td class="ro">+22%</td><td class="rv">+60%</td><td class="rv">+210%</td><td class="rv">+480%</td><td style="font-size:9px;color:var(--d1);">FTX collapse bottom $15,476</td></tr>
+                <tr><td>Jan–Mar 2023</td><td style="color:var(--a);">1.0–1.3</td><td style="font-weight:600;">$16,500–22,000</td><td class="rv">+95%</td><td class="rv">+170%</td><td class="rv">+280%</td><td class="rv">+470%</td><td style="font-size:9px;color:var(--d1);">Post-FTX base formation</td></tr>
+                <tr><td style="color:var(--a);">Feb–Apr 2026</td><td style="color:var(--a);">1.2–1.43</td><td style="font-weight:600;color:var(--a);">$65,000–77,700</td><td style="color:var(--d1);">TBD</td><td style="color:var(--d1);">TBD</td><td style="color:var(--d1);">TBD</td><td style="color:var(--d1);">TBD</td><td style="font-size:9px;color:var(--d1);">Still in zone · MVRV 1.43 as of <span class="lu"></span></td></tr>
+              </tbody>
+            </table>
+            <div class="caveat">Key insight: 90d returns range from −20% to +145% — huge variance. 12m returns: consistently positive in every single case except the mid-cycle Jun 2021 entry. Minimum holding horizon: 12 months from signal trigger.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">MVRV Return Distribution <span style="font-size:9px;color:var(--d1);">all 8 entries</span></div>
+            <div class="cwrap" style="height:220px;"><canvas id="c-mvrv" role="img" aria-label="Bar chart of MVRV sub-1.5 forward returns at 90d 180d 12m and 18m timeframes">MVRV forward returns.</canvas></div>
+          </div>
+        </div>
+
+        <!-- HALVING -->
+        <div id="bt-halving" class="subpanel">
+          <div class="mg4" style="margin-bottom:14px;">
+            <div class="mc" style="border-color:var(--p);"><div class="mc-lbl" style="color:var(--p);">Halving 1 · Nov 2012</div><div class="mc-val" style="color:var(--p);">+8,858%</div><div class="mc-sub">$12 → $1,130 · 12m</div></div>
+            <div class="mc" style="border-color:var(--p);"><div class="mc-lbl" style="color:var(--p);">Halving 2 · Jul 2016</div><div class="mc-val" style="color:var(--p);">+291%</div><div class="mc-sub">$650 → $2,540 · 12m</div></div>
+            <div class="mc" style="border-color:var(--p);"><div class="mc-lbl" style="color:var(--p);">Halving 3 · May 2020</div><div class="mc-val" style="color:var(--p);">+541%</div><div class="mc-sub">$8,570 → $55,847 · 12m</div></div>
+            <div class="mc a"><div class="mc-lbl">Halving 4 · Apr 2024*</div><div class="mc-val a">+31%</div><div class="mc-sub">Weakest on record at 12m</div></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Halving Cycle Full Data <span style="font-size:9px;color:var(--d1);">* = incomplete / pending</span></div>
+            <table class="tbl">
+              <thead><tr><th>Halving</th><th>Date</th><th>Entry</th><th>6m</th><th>12m</th><th>18m</th><th>Cycle Peak</th><th>Peak Return</th><th>Time to Peak</th></tr></thead>
+              <tbody>
+                <tr><td style="font-weight:600;">1st</td><td style="font-size:9px;color:var(--d1);">Nov 28 2012</td><td style="font-weight:600;">$12.22</td><td class="rv">+1,700%</td><td class="rv">+8,858%</td><td class="rv">+5,200%</td><td style="font-weight:600;">$1,130</td><td class="rv">+9,147%</td><td style="font-size:9px;color:var(--d1);">~12m</td></tr>
+                <tr><td style="font-weight:600;">2nd</td><td style="font-size:9px;color:var(--d1);">Jul 9 2016</td><td style="font-weight:600;">$650</td><td class="ro">+60%</td><td class="rv">+291%</td><td class="rv">+1,219%</td><td style="font-weight:600;">$19,783</td><td class="rv">+2,943%</td><td style="font-size:9px;color:var(--d1);">~17m</td></tr>
+                <tr><td style="font-weight:600;">3rd</td><td style="font-size:9px;color:var(--d1);">May 11 2020</td><td style="font-weight:600;">$8,570</td><td class="rv">+100%</td><td class="rv">+541%</td><td class="rv">+645%</td><td style="font-weight:600;">$67,549</td><td class="rv">+688%</td><td style="font-size:9px;color:var(--d1);">~18m</td></tr>
+                <tr><td style="font-weight:600;color:var(--a);">4th*</td><td style="font-size:9px;color:var(--d1);">Apr 20 2024</td><td style="font-weight:600;color:var(--a);">$63,850</td><td class="ro">+47%</td><td class="ra">+31%</td><td style="color:var(--d1);">TBD</td><td style="font-weight:600;color:var(--a);">$126,277*</td><td class="rv">+98%*</td><td style="font-size:9px;color:var(--d1);">~5.5m*</td></tr>
+              </tbody>
+            </table>
+            <div class="caveat">4th halving ATH was $126,277 on Oct 6 2025 — unusually early (5.5m vs historical 12–18m). Current price ~$77.7k = −38.5% from ATH. Open question: was Oct 2025 the cycle top, or a mid-cycle high (like Apr 2021 before BTC pushed to $69k in Nov 2021)?</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Post-Halving 12m Returns (log scale)</div>
+            <div class="cwrap" style="height:200px;"><canvas id="c-halv" role="img" aria-label="Logarithmic bar chart of 12-month post-halving returns showing diminishing returns trend">Post-halving returns by cycle.</canvas></div>
+          </div>
+        </div>
+
+        <!-- MULTI -->
+        <div id="bt-multi" class="subpanel">
+          <div class="mg4" style="margin-bottom:14px;">
+            <div class="mc g"><div class="mc-lbl">Total events (2013–now)</div><div class="mc-val g">4</div><div class="mc-sub">Rare — avg once per 2.5 years</div></div>
+            <div class="mc g"><div class="mc-lbl">Avg 12m return</div><div class="mc-val g">+410%</div><div class="mc-sub">Across all 4 events</div></div>
+            <div class="mc g"><div class="mc-lbl">Avg 18m return</div><div class="mc-val g">+820%</div><div class="mc-sub">Minimum was +300%</div></div>
+            <div class="mc r"><div class="mc-lbl">Signals firing today</div><div class="mc-val r">0–1/7</div><div class="mc-sub">NOT a convergence event</div></div>
+          </div>
+          <div class="card">
+            <div class="card-title">The 4 Multi-Signal Convergence Events</div>
+            <div class="tl">
+              <div class="tl-item"><div class="tl-dot g"></div><div class="tl-date">Aug–Oct 2015 · BTC ~$230–270</div><div class="tl-ttl">Event #1 — Post-2013 Bubble Bottom</div><div style="margin:5px 0;"><span class="sb-mv">MVRV 0.54</span><span class="sb-hs">Miner cap</span><span class="sb-lt">LTH exhaustion</span><span class="sb-ex">Low exchange supply</span></div><div class="tl-body">MVRV all-time low of 0.54. Miners capitulating 18 months. LTH selling virtually stopped. Deepest undervaluation in Bitcoin's modern history.</div><div class="tl-rets"><span class="tl-ret a">90d: +30%</span><span class="tl-ret g">180d: +95%</span><span class="tl-ret g">12m: +320%</span><span class="tl-ret g">18m: +850%</span></div></div>
+              <div class="tl-item"><div class="tl-dot g"></div><div class="tl-date">Nov–Dec 2018 · BTC ~$3,200–3,500</div><div class="tl-ttl">Event #2 — ICO Bubble Collapse Bottom</div><div style="margin:5px 0;"><span class="sb-mv">MVRV 0.70</span><span class="sb-hs">Hashrate −30%</span><span class="sb-lt">LTH losses peak</span><span class="sb-ex">Exchange reserves low</span></div><div class="tl-body">MVRV 0.70 — entire network below aggregate cost basis. BTC/BCH hash war accelerated capitulation. Most well-documented accumulation event. Bottom Dec 15 2018 at $3,122.</div><div class="tl-rets"><span class="tl-ret r">90d: −10%</span><span class="tl-ret g">180d: +100%</span><span class="tl-ret g">12m: +245%</span><span class="tl-ret g">18m: +485%</span></div></div>
+              <div class="tl-item"><div class="tl-dot g"></div><div class="tl-date">Mar 12–20, 2020 · BTC ~$3,800–5,800</div><div class="tl-ttl">Event #3 — COVID Crash</div><div style="margin:5px 0;"><span class="sb-mv">MVRV 0.88</span><span class="sb-hs">Miner cap</span><span class="sb-lt">SOPR &lt;1.0</span><span class="sb-ex">Exchange inflow reversal</span></div><div class="tl-body">BTC fell 60% in 48 hours. Signal lasted ~1 week — most retail missed it. Halving was 2 months away. Best single entry in modern Bitcoin history.</div><div class="tl-rets"><span class="tl-ret g">90d: +145%</span><span class="tl-ret g">180d: +290%</span><span class="tl-ret g">12m: +540%</span><span class="tl-ret g">18m: +1,100%</span></div></div>
+              <div class="tl-item"><div class="tl-dot g"></div><div class="tl-date">Nov–Dec 2022 · BTC ~$15,500–18,000</div><div class="tl-ttl">Event #4 — FTX Collapse Bottom</div><div style="margin:5px 0;"><span class="sb-mv">MVRV 0.76</span><span class="sb-hs">Hashrate −20%</span><span class="sb-lt">LTH losses record</span><span class="sb-ex">Exchange reserves 5yr low</span></div><div class="tl-body">MVRV 0.76. Whales losing $337M/day. Hash rate −20%. Exchange reserves 5-year lows. Classic capitulation: last sellers gave up. Bottom Nov 21 2022 at $15,476.</div><div class="tl-rets"><span class="tl-ret a">90d: +50%</span><span class="tl-ret g">180d: +140%</span><span class="tl-ret g">12m: +210%</span><span class="tl-ret g">18m: +480%</span></div></div>
+              <div class="tl-item"><div class="tl-dot a"></div><div class="tl-date">April 2026 — Current</div><div class="tl-ttl" style="color:var(--a);">Improving setup — not yet a convergence event</div><div class="tl-body">MVRV 1.43 (accumulation zone ✓), hash price $37 (approaching $28 floor), LTH losses $200M/day (elevated but easing), OG holders shifting from distribution → accumulation, ETF inflows running 4 consecutive weeks ($824M last week). Missing: LTH loss exhaustion, hash price capitulation, MVRV sub-1.0. A drop to $55–65k would likely trigger full multi-signal convergence.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RETURNS -->
+        <div id="bt-returns" class="subpanel">
+          <div class="mg2">
+            <div class="card"><div class="card-title">90-Day Return Distribution</div><div class="cwrap" style="height:200px;"><canvas id="c-d90" role="img" aria-label="Bar chart showing 90-day return distribution">90d returns distribution.</canvas></div></div>
+            <div class="card"><div class="card-title">12-Month Return Distribution</div><div class="cwrap" style="height:200px;"><canvas id="c-d12" role="img" aria-label="Bar chart showing 12-month return distribution">12m returns distribution.</canvas></div></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Full Data Table — Signal Strength vs Returns</div>
+            <table class="tbl">
+              <thead><tr><th>Event</th><th>Signals</th><th>Entry</th><th>90d</th><th>180d</th><th>12m</th><th>Max DD after entry</th><th>Verdict</th></tr></thead>
+              <tbody>
+                <tr><td>Aug 2015</td><td>4</td><td style="font-weight:600;">$270</td><td class="ro">+30%</td><td class="rv">+95%</td><td class="rv">+320%</td><td class="ra">−35%</td><td><span class="bdg g">Strong buy</span></td></tr>
+                <tr><td>Nov 2018</td><td>4</td><td style="font-weight:600;">$3,400</td><td class="rb">−10%</td><td class="rv">+100%</td><td class="rv">+245%</td><td class="rb">−40%</td><td><span class="bdg g">Strong buy</span></td></tr>
+                <tr><td>Jan 2019</td><td>2</td><td style="font-weight:600;">$3,600</td><td class="rv">+120%</td><td class="rv">+220%</td><td class="rv">+310%</td><td class="ra">−22%</td><td><span class="bdg g">Buy</span></td></tr>
+                <tr><td>Mar 2020</td><td>4</td><td style="font-weight:600;">$4,800</td><td class="rv">+145%</td><td class="rv">+290%</td><td class="rv">+540%</td><td class="rb">−46%</td><td><span class="bdg g">Strong buy</span></td></tr>
+                <tr><td>Jun 2021</td><td>1</td><td style="font-weight:600;">$32,000</td><td class="rv">+110%</td><td class="rv">+90%</td><td class="ro">+55%</td><td class="rb">−62%</td><td><span class="bdg a">Caution</span></td></tr>
+                <tr><td>Nov 2022</td><td>4</td><td style="font-weight:600;">$16,500</td><td class="ro">+50%</td><td class="rv">+140%</td><td class="rv">+210%</td><td class="ra">−20%</td><td><span class="bdg g">Strong buy</span></td></tr>
+                <tr><td>Jan 2023</td><td>2</td><td style="font-weight:600;">$18,000</td><td class="rv">+95%</td><td class="rv">+170%</td><td class="rv">+280%</td><td class="ra">−18%</td><td><span class="bdg g">Buy</span></td></tr>
+                <tr><td style="color:var(--a);">Apr 2026 NOW</td><td style="color:var(--a);">0–1</td><td style="font-weight:600;color:var(--a);">~$77.7k</td><td style="color:var(--d1);">TBD</td><td style="color:var(--d1);">TBD</td><td style="color:var(--d1);">TBD</td><td style="color:var(--d1);">—</td><td><span class="bdg a">Watch</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="mg3">
+            <div style="background:var(--rl);border:1px solid rgba(231,76,60,0.2);border-radius:6px;padding:13px;">
+              <div style="font-size:8px;color:var(--r);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:7px;">Never true at 90 days</div>
+              <div style="font-family:var(--sans);font-size:18px;font-weight:700;color:var(--r);">Don't check</div>
+              <div style="font-size:9px;color:var(--d1);margin-top:6px;line-height:1.65;">90-day returns after multi-signal events range −46% to +145%. Checking at 3 months may cause you to panic-sell at the bottom of the highest-conviction entry in years.</div>
+            </div>
+            <div style="background:var(--al);border:1px solid rgba(230,126,34,0.2);border-radius:6px;padding:13px;">
+              <div style="font-size:8px;color:var(--a);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:7px;">Always true at 12 months</div>
+              <div style="font-family:var(--sans);font-size:18px;font-weight:700;color:var(--a);">+210–540%</div>
+              <div style="font-size:9px;color:var(--d1);margin-top:6px;line-height:1.65;">Every 12-month return from a multi-signal event has been strongly positive. The signal does not tell you when — it tells you the 12-month window will be rewarding if you hold through noise.</div>
+            </div>
+            <div style="background:var(--gl);border:1px solid rgba(39,174,96,0.2);border-radius:6px;padding:13px;">
+              <div style="font-size:8px;color:var(--g);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:7px;">Max drawdown after entry</div>
+              <div style="font-family:var(--sans);font-size:18px;font-weight:700;color:var(--g);">−18% to −62%</div>
+              <div style="font-size:9px;color:var(--d1);margin-top:6px;line-height:1.65;">Every entry — even the best ones — had a 15–60% drawdown afterward. Never deploy all capital at once. Never invest more than you can see halved without panic-selling. Scale in over weeks.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LIMITS -->
+        <div id="bt-limits" class="subpanel">
+          <div class="mg2">
+            <div class="card">
+              <div class="card-title" style="color:var(--r);">⚠ What this backtest cannot tell you</div>
+              <div class="tl">
+                <div class="tl-item"><div class="tl-dot r"></div><div class="tl-ttl">Sample size is dangerously small</div><div class="tl-body">4 halving cycles. 4 multi-signal events. 8 MVRV sub-1.5 entries. "100% hit rate on 4 events" — a coin flip has a 6.25% chance of heads 4× in a row. We have 4 data points.</div></div>
+                <div class="tl-item"><div class="tl-dot r"></div><div class="tl-ttl">Market structure has fundamentally changed</div><div class="tl-body">2013 Bitcoin was a $1B asset with zero institutions. 2026 is a $1.4T asset with ETFs, corporate treasuries, sovereign interest. Patterns from retail-driven bear cycles may not repeat identically.</div></div>
+                <div class="tl-item"><div class="tl-dot r"></div><div class="tl-ttl">4th halving cycle is already anomalous</div><div class="tl-body">Weakest 12m post-halving return on record (+31% vs avg +540%). ATH came 5.5m post-halving instead of 12–18m. Historical halving pattern expectations for 2024 cycle require caution.</div></div>
+                <div class="tl-item"><div class="tl-dot r"></div><div class="tl-ttl">ETF signals have zero backtest history</div><div class="tl-body">Spot ETFs launched January 2024. One data point. We do not know how ETF holders behave during a sustained 60%+ drawdown — will they hold like LTHs or redeem like traditional fund investors?</div></div>
+                <div class="tl-item"><div class="tl-dot r"></div><div class="tl-ttl">Survivorship bias in source data</div><div class="tl-body">The signal dates here come from analyst reports written looking backward. We selected events that "worked." We cannot know how many sub-threshold signals did NOT precede rallies — those don't get published.</div></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-title" style="color:var(--g);">✓ What this backtest can tell you</div>
+              <div class="tl">
+                <div class="tl-item"><div class="tl-dot g"></div><div class="tl-ttl">Historical context for current positioning</div><div class="tl-body">At MVRV 1.43, BTC is in the accumulation zone — the same zone as Nov 2018, Mar 2020, and Nov 2022 before major recoveries. This is meaningfully different from neutral/mid-cycle. The 7/10 score reflects genuine on-chain value, not just timing.</div></div>
+                <div class="tl-item"><div class="tl-dot g"></div><div class="tl-ttl">What to expect if signals do trigger</div><div class="tl-body">If BTC falls to $50–65k triggering MVRV sub-1.5 and multi-signal convergence, historical data gives you confidence that a 12m hold from that entry has returned 200–500%+ every single time it occurred.</div></div>
+                <div class="tl-item"><div class="tl-dot g"></div><div class="tl-ttl">Position sizing reality check</div><div class="tl-body">Even the best historical entries saw 20–60% drawdowns. If a 40% drop would force you to sell, your position is too large — regardless of signal strength.</div></div>
+                <div class="tl-item"><div class="tl-dot g"></div><div class="tl-ttl">12-month is the minimum viable horizon</div><div class="tl-body">90-day variance is enormous and misleading. 12-month is where the historical signal edge actually shows up. If you can't hold 12+ months, the backtest edge doesn't apply to you.</div></div>
+              </div>
+              <div style="margin-top:12px;padding:10px 12px;background:var(--bg3);border-radius:5px;font-size:9px;color:var(--d1);line-height:1.7;">
+                <strong style="color:var(--tx);">Data sources (all public, no subscription):</strong><br>
+                MVRV levels: Glassnode public research, Bitcoin Magazine Pro, Checkonchain · Halving data: CoinGecko, Bitbo.io, Kraken · Miner capitulation: CoinShares quarterly reports, Luxor Hashrate Index · LTH/SOPR: Glassnode week-in-review (free), Checkonchain · Price history: CoinGecko API, CoinMarketCap · Multi-signal identification: Spotedcrypto, Chaincatcher cross-referenced with primary Glassnode data
+              </div>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -1131,6 +1342,30 @@ function switchTab(id, skipSave) {
   document.querySelectorAll('.main-tab')[idx]?.classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   if(!skipSave) store(SK_TABS, id);
+  if(id==='backtest') initCharts();
+}
+
+// ═══ CHARTS (lazy init for Backtest tab) ═════════════════
+let chartsInited = false;
+function initCharts() {
+  if(chartsInited) return;
+  if(typeof Chart === 'undefined') return; // Chart.js not loaded yet
+  chartsInited = true;
+  const FONT = 'IBM Plex Mono';
+  const tc = 'rgba(88,104,122,0.9)', gc = 'rgba(255,255,255,0.05)';
+  const cfgBase = { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ display:false } }, scales:{ y:{ ticks:{color:tc,font:{family:FONT,size:9}}, grid:{color:gc}, border:{display:false} }, x:{ ticks:{color:tc,font:{family:FONT,size:9},maxRotation:0}, grid:{display:false}, border:{display:false} } } };
+
+  const mvrvEl = document.getElementById('c-mvrv');
+  if(mvrvEl) new Chart(mvrvEl, { type:'bar', data:{ labels:['90d avg','180d avg','12m avg','18m avg'], datasets:[{ data:[22,89,312,580], backgroundColor:['rgba(41,128,185,0.7)','rgba(230,126,34,0.7)','rgba(39,174,96,0.8)','rgba(39,174,96,0.45)'], borderRadius:4 }] }, options:{ ...cfgBase, plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>(c.parsed.y<0?'':'+') +c.parsed.y+'%'}} } } });
+
+  const halvEl = document.getElementById('c-halv');
+  if(halvEl) new Chart(halvEl, { type:'bar', data:{ labels:['Halving 1\n2012','Halving 2\n2016','Halving 3\n2020','Halving 4*\n2024'], datasets:[{ data:[8858,291,541,31], backgroundColor:['rgba(142,68,173,0.7)','rgba(142,68,173,0.7)','rgba(142,68,173,0.7)','rgba(230,126,34,0.7)'], borderRadius:4 }] }, options:{ ...cfgBase, scales:{ ...cfgBase.scales, y:{ type:'logarithmic', ticks:{color:tc,font:{family:FONT,size:9},callback:v=>'+'+v.toLocaleString()+'%'}, grid:{color:gc}, border:{display:false} } }, plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>'+'+c.parsed.y.toLocaleString()+'%'}} } } });
+
+  const d90El = document.getElementById('c-d90');
+  if(d90El) new Chart(d90El, { type:'bar', data:{ labels:['< −20%','−20–0%','0–50%','50–150%','>150%'], datasets:[{ data:[2,2,2,2,3], backgroundColor:['rgba(231,76,60,0.7)','rgba(231,76,60,0.4)','rgba(230,126,34,0.6)','rgba(39,174,96,0.6)','rgba(39,174,96,0.85)'], borderRadius:4 }] }, options:{ ...cfgBase, plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>c.parsed.y+' events'}} }, scales:{ ...cfgBase.scales, y:{ ticks:{color:tc,font:{family:FONT,size:9},stepSize:1}, grid:{color:gc}, border:{display:false} } } } });
+
+  const d12El = document.getElementById('c-d12');
+  if(d12El) new Chart(d12El, { type:'bar', data:{ labels:['< 0%','0–100%','100–300%','300–600%','>600%'], datasets:[{ data:[0,1,2,4,4], backgroundColor:['rgba(231,76,60,0.7)','rgba(230,126,34,0.5)','rgba(230,126,34,0.75)','rgba(39,174,96,0.65)','rgba(39,174,96,0.9)'], borderRadius:4 }] }, options:{ ...cfgBase, plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>c.parsed.y+' events'}} }, scales:{ ...cfgBase.scales, y:{ ticks:{color:tc,font:{family:FONT,size:9},stepSize:1}, grid:{color:gc}, border:{display:false} } } } });
 }
 
 function navTo(tab, secId) {
