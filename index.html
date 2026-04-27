@@ -740,7 +740,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
                 <div class="lrow"><span class="lrow-k">Source</span><span class="lrow-v" style="color:var(--b);">Luxor Hashrate Index</span></div>
               </div>
               <div id="miner-prose" style="font-size:9px;color:var(--d1);line-height:1.75;padding-top:2px;">
-                Most miners are <span style="color:var(--r);">underwater</span> at ~$74k vs $77–88k breakeven — forced to sell to cover electricity. However, hash price near all-time post-halving low <span style="color:var(--a);">($28)</span> is a <span style="color:var(--g);">contrarian buy signal</span> — historically marks miner capitulation bottoms. Watch for 3 consecutive negative difficulty adjustments = weakest miners offline = sell pressure exhausted.
+                Miners showing real stress — hashrate <span style="color:var(--r);">-13% WoW</span> (969→843 EH/s), next difficulty estimated <span style="color:var(--r);">-4%</span>, weakest miners unplugging fast. Pure-play miner stocks (MARA, RIOT, CIFR) down 30-40% YTD confirms genuine financial pressure, not just AI-pivot rotation. <span style="color:var(--g);">Bullish read:</span> forced selling from stressed miners exhausts at exactly the price levels MVRV says are accumulation zones — <span style="color:var(--g);">historically the highest-conviction setup in Bitcoin</span>. One caveat: some hashrate drop reflects permanent AI-compute migration (Core Scientific, Hut 8) rather than stress, which slightly reduces post-capitulation bounce magnitude vs 2019/2023 (expect 30-50% rally instead of 100%+). Net: still a <span style="color:var(--g);">contrarian buy signal</span>, just less explosive than prior cycles. Watch for hash price &lt; $28 + 3 consecutive negative difficulty adjustments for full confirmation.
               </div>
             </div>
           </div>
@@ -1040,7 +1040,7 @@ fetchPx(); setInterval(fetchPx, 60000);
 const CHECKS = [
   { lbl:'MVRV drops below 1.5', sub:'Price approaching realized cap — strong accumulation zone', src:'e-mvrv', tgt:'< 1.5',
     ev: v => { const n = parseFloat(v); if(isNaN(n)) return 0; if(n<1.5) return 2; if(n<2.0) return 1; return 0; } },
-  { lbl:'Hash price ≤ $28/PH/s/day', sub:'Miner capitulation bottom — generational buy signal historically', src:'e-hash', tgt:'≤ $28',
+  { lbl:'Hash price ≤ $28/PH/s/day', sub:'Miner capitulation bottom — strong buy signal, magnitude reduced by AI migration', src:'e-hash', tgt:'≤ $28',
     ev: v => { const n = parseFloat(v.replace(/[^0-9.]/g,'')); if(isNaN(n)) return 0; if(n<=28) return 2; if(n<=32) return 1; return 0; } },
   { lbl:'LTH losses cool below $25M/day', sub:'Glassnode signal for exhaustion of selling pressure', src:'e-lthloss', tgt:'< $25M/day',
     ev: v => { const n = parseFloat(v.replace(/[^0-9.]/g,'')); if(isNaN(n)) return 0; if(n<25) return 2; if(n<75) return 1; return 0; } },
@@ -1339,12 +1339,18 @@ function updateDynamicText() {
 
   const hashEl = document.getElementById('e-hash');
   const minerEl = document.getElementById('e-miner');
+  const hrateEl = document.getElementById('e-hrate');
   const minerProseEl = document.getElementById('miner-prose');
   if(minerProseEl && hashEl && minerEl) {
     const hash = hashEl.value;
     const breakeven = minerEl.value;
-    const px = lastPx ? ('$' + Math.round(lastPx/1000) + 'k') : '~$74k';
-    minerProseEl.innerHTML = `Most miners are <span style="color:var(--r);">underwater</span> at ${px} vs ${breakeven} breakeven — forced to sell to cover electricity. However, hash price at ${hash} near all-time post-halving low <span style="color:var(--a);">($28)</span> is a <span style="color:var(--g);">contrarian buy signal</span> — historically marks miner capitulation bottoms. Watch for 3 consecutive negative difficulty adjustments = weakest miners offline = sell pressure exhausted.`;
+    const hrate = hrateEl ? hrateEl.value : '~843 EH/s';
+    const px = lastPx ? ('$' + Math.round(lastPx/1000) + 'k') : '~$77.7k';
+    // Determine if industry breakeven low end is above or below current price
+    const breakevenLow = parseFloat(breakeven.replace(/[^0-9.]/g,'')) * 1000;
+    const stressLevel = (lastPx && lastPx < breakevenLow) ? 'underwater' : 'near breakeven';
+    const stressColor = (lastPx && lastPx < breakevenLow) ? 'var(--r)' : 'var(--a)';
+    minerProseEl.innerHTML = `Miners <span style="color:${stressColor};">${stressLevel}</span> at ${px} vs ${breakeven} industry breakeven · hashrate <span style="color:var(--r);">-13% WoW</span> (${hrate}), next difficulty estimated <span style="color:var(--r);">-4%</span>, weakest miners unplugging fast. Pure-play miner stocks (MARA, RIOT, CIFR) down 30-40% YTD confirms genuine financial pressure, not just AI-pivot rotation. <span style="color:var(--g);">Bullish read:</span> forced selling from stressed miners exhausts at exactly the price levels MVRV says are accumulation zones — <span style="color:var(--g);">historically the highest-conviction setup in Bitcoin</span>. One caveat: some hashrate drop reflects permanent AI-compute migration (Core Scientific, Hut 8) rather than stress, which slightly reduces post-capitulation bounce magnitude vs 2019/2023 (expect 30-50% rally instead of 100%+). Net: still a <span style="color:var(--g);">contrarian buy signal</span>, just less explosive than prior cycles. Watch for hash price at ${hash} drop below <span style="color:var(--a);">$28</span> + 3 consecutive negative difficulty adjustments for full confirmation.`;
   }
 
   const mbtcEl = document.getElementById('e-mbtc');
