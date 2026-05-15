@@ -754,10 +754,10 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
           </div>
           <div class="sec-body" style="display:none;">
             <div class="mg4">
-              <div class="mc r"><div class="mc-lbl">Industry Breakeven</div><div class="mc-val r"><input class="e" id="e-miner" value="$77–88k" data-fetched="2026-04-15"/></div><div class="mc-sub">JPMorgan / CoinShares</div><div class="mc-trend" id="t-miner"></div></div>
+              <div class="mc g"><div class="mc-lbl">Industry Breakeven</div><div class="mc-val g"><input class="e" id="e-miner" value="$77–88k" data-fetched="2026-04-15"/></div><div class="mc-sub">BTC $81.6k = bottom half of pack in profit · CoinShares Q1</div><div class="mc-trend" id="t-miner"></div></div>
               <div class="mc g"><div class="mc-lbl">Efficient Miners</div><div class="mc-val g"><input class="e" id="e-effm" value="$34–43k" data-fetched="2026-04-15"/></div><div class="mc-sub">MARA/CLSK — profitable</div></div>
-              <div class="mc r"><div class="mc-lbl">Hash Price $/PH/day</div><div class="mc-val r"><input class="e" id="e-hash" value="$37" data-fetched="2026-05-10"/></div><div class="mc-sub">Capitulation floor: $28 · Bitbo</div><div class="mc-trend" id="t-hash"></div></div>
-              <div class="mc g"><div class="mc-lbl">Network Hashrate</div><div class="mc-val g"><input class="e" id="e-hrate" value="~1,097 EH/s" data-fetched="2026-05-10"/></div><div class="mc-sub">+192 EH/s WoW · FULL RECOVERY · Bitbo <span class="lu"></span></div><div class="mc-trend" id="t-hrate"></div></div>
+              <div class="mc r"><div class="mc-lbl">Hash Price $/PH/day</div><div class="mc-val r"><input class="e" id="e-hash" value="$37" data-fetched="2026-05-15"/></div><div class="mc-sub">Capitulation floor: $28 · Bitbo</div><div class="mc-trend" id="t-hash"></div></div>
+              <div class="mc g"><div class="mc-lbl">Network Hashrate</div><div class="mc-val g"><input class="e" id="e-hrate" value="~1,097 EH/s" data-fetched="2026-05-15"/></div><div class="mc-sub">Flat WoW · holding post-recovery · Bitbo <span class="lu"></span></div><div class="mc-trend" id="t-hrate"></div></div>
             </div>
             <div class="mg2">
               <div>
@@ -767,7 +767,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
                 <div class="lrow"><span class="lrow-k">Source</span><span class="lrow-v" style="color:var(--b);">Luxor Hashrate Index</span></div>
               </div>
               <div id="miner-prose" style="font-size:9px;color:var(--d1);line-height:1.75;padding-top:2px;">
-                Major shift this week — hashrate <span style="color:var(--g);">FULL RECOVERY +192 EH/s</span> (905→1,097 EH/s), back near pre-stress levels. Next difficulty estimated <span style="color:var(--g);">+2.39% (POSITIVE)</span> — the negative trend is over. Miners are coming back online aggressively at $80k+. <span style="color:var(--a);">⚠ This kills the "miner capitulation contrarian buy" thesis for now</span> — the forced-selling exhaustion mechanism that creates post-cap rallies didn't get to play out fully because BTC rallied first, miners came back. Mining stocks mixed today (MARA +1.89%, CORZ +2.5%, but HUT -2.69%) — no broad capitulation. Hash price at $37 still elevated above $28 capitulation floor. <span style="color:var(--d1);">Bottom line:</span> Miner capitulation signal is OFF the table for this cycle unless BTC drops back to $65-70k and triggers renewed stress. The 2-week stress window (Apr 13-27) was real but resolved without full capitulation. AI migration narrative (Core Scientific +2.5%, Hut 8 -2.69%) continues splitting pure-play vs hybrid miners. Net: this signal is no longer firing — remove from active watch list.
+                <strong>Status: capitulation signal CLOSED, not firing.</strong> Hashrate steady at 1,097 EH/s holding the post-recovery levels. Last difficulty -2.3%, next estimated <span style="color:var(--g);">+2.39% (positive)</span> — the negative cycle is over. BTC at $81.6k is now ABOVE the bottom half of CoinShares' $77-88k industry breakeven range, meaning mid-tier miners have moved back into profit. Hash price at $37 — well above the $28 capitulation floor that historically marks bottoms. <span style="color:var(--d1);">Net: the brief Apr 13-27 stress window resolved upward without forced-selling exhaustion ever playing out.</span> The contrarian "buy miner capitulation" signal didn't fire this cycle because BTC rallied before stress peaked. AI migration narrative still relevant for sector composition (Core Scientific, Hut 8 hybrid models outperforming pure-play) but no longer a near-term catalyst. <span style="color:var(--a);">When would this signal re-fire?</span> Only if BTC drops back below $65-70k and hash price collapses toward $28. Otherwise this signal stays parked on the watch list as a long-cycle floor indicator, not an active buy trigger.
               </div>
             </div>
           </div>
@@ -1690,33 +1690,35 @@ function updateDynamicText() {
   const phEls = document.querySelectorAll('.post-halving-month');
   phEls.forEach(el => el.textContent = 'Month ' + monthsSince);
 
+  // ⚠ NOTE: Dynamic miner-prose auto-rewrite has been DISABLED as of 2026-05-15.
+  // The old template (late April) was overwriting the static HTML prose on every page load,
+  // causing "miner economics outdated" complaints. Miner narrative now stable (signal not firing),
+  // so weekly hand-written prose in the HTML is the source of truth. Re-enable only if hashrate
+  // stress returns and the prose becomes price-reactive again.
+  /*
   const hashEl = document.getElementById('e-hash');
   const minerEl = document.getElementById('e-miner');
   const hrateEl = document.getElementById('e-hrate');
   const minerProseEl = document.getElementById('miner-prose');
   if(minerProseEl && hashEl && minerEl) {
-    const hash = hashEl.value;
-    const breakeven = minerEl.value;
-    const hrate = hrateEl ? hrateEl.value : '~843 EH/s';
-    const px = lastPx ? ('$' + Math.round(lastPx/1000) + 'k') : '~$77.7k';
-    // Determine if industry breakeven low end is above or below current price
-    const breakevenLow = parseFloat(breakeven.replace(/[^0-9.]/g,'')) * 1000;
-    const stressLevel = (lastPx && lastPx < breakevenLow) ? 'underwater' : 'near breakeven';
-    const stressColor = (lastPx && lastPx < breakevenLow) ? 'var(--r)' : 'var(--a)';
-    minerProseEl.innerHTML = `Miners <span style="color:${stressColor};">${stressLevel}</span> at ${px} vs ${breakeven} industry breakeven · hashrate <span style="color:var(--r);">-13% WoW</span> (${hrate}), next difficulty estimated <span style="color:var(--r);">-4%</span>, weakest miners unplugging fast. Pure-play miner stocks (MARA, RIOT, CIFR) down 30-40% YTD confirms genuine financial pressure, not just AI-pivot rotation. <span style="color:var(--g);">Bullish read:</span> forced selling from stressed miners exhausts at exactly the price levels MVRV says are accumulation zones — <span style="color:var(--g);">historically the highest-conviction setup in Bitcoin</span>. One caveat: some hashrate drop reflects permanent AI-compute migration (Core Scientific, Hut 8) rather than stress, which slightly reduces post-capitulation bounce magnitude vs 2019/2023 (expect 30-50% rally instead of 100%+). Net: still a <span style="color:var(--g);">contrarian buy signal</span>, just less explosive than prior cycles. Watch for hash price at ${hash} drop below <span style="color:var(--a);">$28</span> + 3 consecutive negative difficulty adjustments for full confirmation.`;
+    // [template was here - see git history]
   }
+  */
 
   const mbtcEl = document.getElementById('e-mbtc');
+  // ⚠ NOTE: Dynamic MSTR-prose auto-rewrite has been DISABLED as of 2026-05-15.
+  // Same bug as miner-prose - template was frozen at April 20 narrative ("largest single-week
+  // purchase of 2026") and overwriting weekly hand-written updates on every page load.
+  // The MSTR narrative now changes weekly (STRC dynamics, doctrine shifts, buy/pause/sell
+  // signals) and can't be captured in a static template. Static HTML prose is source of truth.
+  /*
   const mcostEl = document.getElementById('e-mcost');
   const mlastEl = document.getElementById('e-mlast');
   const mstrProseEl = document.getElementById('mstr-prose');
   if(mstrProseEl && mcostEl && mlastEl) {
-    const cost = mcostEl.value;
-    const lastBuy = mlastEl.value;
-    const px = lastPx ? ('$' + Math.round(lastPx/1000) + 'k') : '~$74k';
-    const underwater = lastPx && parseFloat(cost.replace(/[^0-9.]/g,'')) > lastPx;
-    mstrProseEl.innerHTML = `At ${px}, MSTR is <span style="color:var(--${underwater?'r':'g'});">${underwater?'below':'above'}</span> their avg cost of ${cost} — ${underwater?'underwater':'in profit'}. Latest buy: ${lastBuy} — largest single-week purchase of 2026. At this pace Strategy could surpass Satoshi's estimated BTC holdings by Sep 2026. The <span style="color:var(--a);">$80–84k cluster</span> (ETF avg investor basis) is the next overhead resistance zone.`;
+    // [template was here - see git history]
   }
+  */
 
   const goldEl = document.getElementById('e-goldpx');
   const ratioDisplayEl = document.getElementById('e-btcgold-display');
