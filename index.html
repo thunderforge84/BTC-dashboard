@@ -394,18 +394,18 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
         <div class="score-ring">
           <svg width="58" height="58" viewBox="0 0 58 58">
             <circle cx="29" cy="29" r="23" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="5"/>
-            <circle cx="29" cy="29" r="23" fill="none" stroke="#27ae60" stroke-width="5"
+            <circle id="scoreArc" cx="29" cy="29" r="23" fill="none" stroke="#27ae60" stroke-width="5"
               stroke-dasharray="144.5" stroke-dashoffset="41.3" stroke-linecap="round"/>
           </svg>
           <div class="score-inner">
-            <div class="score-n" style="color:var(--g);">7</div>
+            <div class="score-n" id="scoreNum" style="color:var(--g);">7</div>
             <div class="score-d">/10</div>
           </div>
         </div>
         <div class="score-meta">
-          <div class="score-verdict" style="color:var(--g);">Accumulation Zone</div>
+          <div class="score-verdict" id="scoreVerdict" style="color:var(--g);">Accumulation Zone</div>
           <div class="score-desc">MVRV 1.41 — back in accumulation zone. BSI flipped GREEN May 12 (first since Mar 2023, 4x rally precedent). MSTR mega-buy 24,869 BTC. ETFs $649M outflow May 18. Mixed.</div>
-          <div class="verdict-tag" style="background:var(--gd);color:var(--g);border-color:rgba(39,174,96,0.3);">▲ Upgraded Signal</div>
+          <div class="verdict-tag" id="scoreTag" style="background:var(--gd);color:var(--g);border-color:rgba(39,174,96,0.3);">▲ Upgraded Signal</div>
         </div>
       </div>
     </div>
@@ -1366,6 +1366,64 @@ function buildChecklist() {
     d.title = CHECKS[i].lbl;
     dots.appendChild(d);
   });
+
+  // Compute & display headline score derived from checklist + whale regime
+  updateHeadlineScore(hits, near, whaleDelta);
+}
+
+// ═══ HEADLINE SCORE (0-10) ═════════════════════════════════
+// Computes the score-ring number from actual checklist state + whale regime.
+// Replaces the old hardcoded "7" that drifted from reality.
+// Formula:
+//   Base 5 (neutral). Each HIT = +1, each CLOSE = +0.5. Whale regime delta included.
+//   Capped at 1-10. Rounded to nearest integer for display.
+function updateHeadlineScore(hits, near, whaleDelta) {
+  const closeOnly = Math.max(0, near - hits);
+  const raw = 5 + hits + (closeOnly * 0.5) + whaleDelta;
+  const score = Math.max(1, Math.min(10, Math.round(raw)));
+
+  // Color + verdict thresholds
+  let color, verdict, tagBg, tagBorder, tagTxt;
+  if(score >= 8) {
+    color = 'var(--g)'; verdict = 'Strong Buy Zone';
+    tagBg = 'var(--gd)'; tagBorder = 'rgba(39,174,96,0.3)'; tagTxt = '▲ High Conviction';
+  } else if(score >= 6) {
+    color = 'var(--g)'; verdict = 'Accumulation Zone';
+    tagBg = 'var(--gd)'; tagBorder = 'rgba(39,174,96,0.3)'; tagTxt = '▲ Bullish Bias';
+  } else if(score >= 4) {
+    color = 'var(--a)'; verdict = 'Neutral / Watch';
+    tagBg = 'var(--ad)'; tagBorder = 'rgba(230,126,34,0.3)'; tagTxt = '◆ Mixed Signals';
+  } else if(score >= 2) {
+    color = 'var(--r)'; verdict = 'Caution Zone';
+    tagBg = 'var(--rd)'; tagBorder = 'rgba(231,76,60,0.3)'; tagTxt = '▼ Bearish Bias';
+  } else {
+    color = 'var(--r)'; verdict = 'Distribution Zone';
+    tagBg = 'var(--rd)'; tagBorder = 'rgba(231,76,60,0.3)'; tagTxt = '▼ Sell Pressure';
+  }
+
+  // Update DOM
+  const numEl = document.getElementById('scoreNum');
+  const mobEl = document.getElementById('mobScore');
+  const verdEl = document.getElementById('scoreVerdict');
+  const tagEl = document.getElementById('scoreTag');
+  const arcEl = document.getElementById('scoreArc');
+
+  if(numEl) { numEl.textContent = score; numEl.style.color = color; }
+  if(mobEl) { mobEl.textContent = score; mobEl.style.color = color; }
+  if(verdEl) { verdEl.textContent = verdict; verdEl.style.color = color; }
+  if(tagEl) {
+    tagEl.textContent = tagTxt;
+    tagEl.style.background = tagBg;
+    tagEl.style.color = color;
+    tagEl.style.borderColor = tagBorder;
+  }
+  // SVG arc: circumference = 2*pi*r = 2*pi*23 ≈ 144.51
+  // dashoffset = circumference * (1 - score/10)
+  if(arcEl) {
+    const circ = 144.51;
+    arcEl.setAttribute('stroke-dashoffset', (circ * (1 - score/10)).toFixed(2));
+    arcEl.setAttribute('stroke', score >= 6 ? '#27ae60' : score >= 4 ? '#e67e22' : '#e74c3c');
+  }
 }
 
 function switchTab(id, skipSave) {
