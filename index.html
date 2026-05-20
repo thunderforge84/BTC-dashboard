@@ -708,7 +708,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 
             <div class="mg4" style="margin-bottom:14px;">
               <div class="mc a"><div class="mc-lbl">Funding Rate (30d avg)</div><div class="mc-val a"><input class="e" id="e-funding" value="Near zero" data-fetched="2026-05-19"/></div><div class="mc-sub">Mildly + last 12 days · cooling after sell-off · CoinGlass</div><div class="mc-trend" id="t-funding"></div></div>
-              <div class="mc r"><div class="mc-lbl">Open Interest Trend</div><div class="mc-val r"><input class="e" id="e-oi" value="$23B BTC perps" data-fetched="2026-05-19"/></div><div class="mc-sub">Largest single-day OI surge of 2026 May 19 · froth warning</div><div class="mc-trend" id="t-oi"></div></div>
+              <div class="mc r"><div class="mc-lbl">Open Interest Trend</div><div class="mc-val r"><input class="e" id="e-oi" value="$56.45B total OI" data-fetched="2026-05-20"/></div><div class="mc-sub">$29M liquidations 24h (small) · futures vol $49.2B · CoinGlass</div><div class="mc-trend" id="t-oi"></div></div>
               <div class="mc a"><div class="mc-lbl">Long/Short Ratio</div><div class="mc-val a"><input class="e" id="e-ls" value="Buy-the-dip skew" data-fetched="2026-05-19"/></div><div class="mc-sub">OI + price falling = traders catching falling knife</div><div class="mc-trend" id="t-ls"></div></div>
               <div class="mc r"><div class="mc-lbl">Market Sentiment</div><div class="mc-val r"><input class="e" id="e-sentiment" value="Deepening fear" data-fetched="2026-05-20"/></div><div class="mc-sub">F&amp;G 25 · BTC -6% WoW · CLARITY Act sell-the-news</div></div>
             </div>
@@ -780,7 +780,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
           </div>
           <div class="sec-body" style="display:none;">
             <div class="mg4">
-              <div class="mc r"><div class="mc-lbl">7-Day Net Flow</div><div class="mc-val r"><input class="e" id="e-etf7" value="-$1.65B (outflows)" data-fetched="2026-05-19"/></div><div class="mc-sub">May 18 = -$649M (largest since Jan) · 6-wk streak ENDED · SoSoValue</div><div class="mc-trend" id="t-etf7"></div></div>
+              <div class="mc r"><div class="mc-lbl">7-Day Net Flow</div><div class="mc-val r"><input class="e" id="e-etf7" value="-$841M WoW (May 12-19)" data-fetched="2026-05-20"/></div><div class="mc-sub">May 18 = -$649M single day · 6-wk streak ENDED · SoSoValue May 19</div><div class="mc-trend" id="t-etf7"></div></div>
               <div class="mc r"><div class="mc-lbl">May Pattern</div><div class="mc-val r"><input class="e" id="e-etfabs" value="Inflow → Outflow" data-fetched="2026-05-19"/></div><div class="mc-sub">Early May $2.7B in, mid-May $1.65B out · regime flip</div></div>
               <div class="mc b"><div class="mc-lbl">Total ETF Holdings</div><div class="mc-val b"><input class="e" id="e-etfhld" value="1,316,947" data-fetched="2026-05-20"/></div><div class="mc-sub">BTC · ~$101.00B AUM · -16,636 WoW (drawdown)</div><div class="mc-trend" id="t-etfhld"></div></div>
               <div class="mc n"><div class="mc-lbl">Q1 2026 Net Inflow</div><div class="mc-val n">$18.7B</div><div class="mc-sub">IBIT led at $8.4B</div></div>
@@ -1233,13 +1233,43 @@ async function fetchPx() {
   const btn = document.getElementById('refreshBtn');
   btn.textContent = '↺ ...'; btn.disabled = true;
   try {
-    const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true&include_market_cap=true');
-    if (!res.ok) throw new Error(res.status);
-    const d = (await res.json()).bitcoin;
-    const px = d.usd, ch = d.usd_24h_change;
-    const el = document.getElementById('sbPx');
+    let px = null, ch = null;
 
-    if (lastPx !== null) {
+    // Try CoinGecko first
+    try {
+      const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true');
+      if(res.ok) {
+        const d = (await res.json()).bitcoin;
+        px = d.usd; ch = d.usd_24h_change;
+      }
+    } catch(e1) {}
+
+    // Fallback 1: Coinbase
+    if(!px) {
+      try {
+        const res = await fetch('https://api.coinbase.com/v2/prices/BTC-USD/spot');
+        if(res.ok) {
+          const d = await res.json();
+          px = parseFloat(d.data.amount);
+          ch = null; // Coinbase spot doesn't return 24h change easily
+        }
+      } catch(e2) {}
+    }
+
+    // Fallback 2: Blockchain.info
+    if(!px) {
+      const res = await fetch('https://blockchain.info/ticker');
+      if(res.ok) {
+        const d = await res.json();
+        px = d.USD.last;
+        ch = null;
+      }
+    }
+
+    if(!px) throw new Error('All APIs failed');
+
+    const el = document.getElementById('sbPx');
+    if(lastPx !== null) {
       el.classList.remove('up','dn','fup','fdn');
       void el.offsetWidth;
       const dir = px >= lastPx;
@@ -1249,16 +1279,25 @@ async function fetchPx() {
     el.textContent = '$' + px.toLocaleString('en-US',{maximumFractionDigits:0});
 
     const chEl = document.getElementById('sbChg');
-    const sign = ch >= 0 ? '+' : '';
-    chEl.textContent = sign + ch.toFixed(2) + '% (24h)';
-    chEl.style.color = ch >= 0 ? 'var(--g)' : 'var(--r)';
+    if(ch !== null) {
+      const sign = ch >= 0 ? '+' : '';
+      chEl.textContent = sign + ch.toFixed(2) + '% (24h)';
+      chEl.style.color = ch >= 0 ? 'var(--g)' : 'var(--r)';
+    } else {
+      chEl.textContent = 'Live price';
+      chEl.style.color = 'var(--d1)';
+    }
 
     document.getElementById('sbDd').textContent = 'Drawdown from ATH: ' + ((px - 126277)/126277*100).toFixed(1) + '%';
 
     const mobPx = document.getElementById('mobPx');
     const mobChg = document.getElementById('mobChg');
     if(mobPx) mobPx.textContent = '$' + px.toLocaleString('en-US',{maximumFractionDigits:0});
-    if(mobChg) { mobChg.textContent = sign + ch.toFixed(2) + '% (24h)'; mobChg.style.color = ch>=0?'var(--g)':'var(--r)'; }
+    if(mobChg && ch !== null) {
+      const sign = ch >= 0 ? '+' : '';
+      mobChg.textContent = sign + ch.toFixed(2) + '% (24h)';
+      mobChg.style.color = ch>=0?'var(--g)':'var(--r)';
+    }
 
     const lo = 34000, hi = 118000;
     const pct = Math.min(98, Math.max(2, (px-lo)/(hi-lo)*100));
@@ -1266,7 +1305,7 @@ async function fetchPx() {
 
     const now = new Date();
     const ts = now.toLocaleTimeString('en-SG',{timeZone:'Asia/Singapore',hour:'2-digit',minute:'2-digit',second:'2-digit'});
-    document.getElementById('sbPxTime').textContent = 'CoinGecko · ' + ts + ' SGT';
+    document.getElementById('sbPxTime').textContent = 'Live · ' + ts + ' SGT';
     document.getElementById('footTime').textContent = 'Refreshed ' + ts;
 
     buildChecklist();
