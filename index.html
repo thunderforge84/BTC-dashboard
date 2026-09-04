@@ -514,7 +514,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
               <div class="mc g"><div class="mc-lbl">MVRV Ratio</div><div class="mc-val g"><span id="mvrvLive">1.52</span><input type="hidden" id="e-mvrv" value="1.52" data-fetched="2026-09-04"/></div><div class="mc-sub">Live: price ÷ realized · Sell&gt;3.7 · Buy&lt;1</div><div class="mc-trend" id="t-mvrv"></div></div>
               <div class="mc g"><div class="mc-lbl">LTH Supply</div><div class="mc-val g"><input class="e" id="e-lth" value="~8.05M" data-fetched="2026-09-04"/></div><div class="mc-sub">Near cycle high · Glassnode</div><div class="mc-trend" id="t-lth"></div></div>
               <div class="mc g"><div class="mc-lbl">Realized Price</div><div class="mc-val g"><input class="e" id="e-rp" value="$53,200" data-fetched="2026-09-04"/></div><div class="mc-sub">Live · Bitbo.io <span class="lu"></span></div><div class="mc-trend" id="t-rp"></div></div>
-              <div class="mc r"><div class="mc-lbl">LTH Daily Losses</div><div class="mc-val r"><input class="e" id="e-lthloss" value="$200M" data-fetched="estimate"/></div><div class="mc-sub">Target: &lt;$25M/day · Glassnode</div><div class="mc-trend" id="t-lthloss"></div></div>
+              <div class="mc a"><div class="mc-lbl">LTH Daily Losses</div><div class="mc-val a"><input class="e" id="e-lthloss" value="Low (unverified)" data-fetched="unverified"/></div><div class="mc-sub">At $80k LTHs mostly in profit — losses should be minimal · verify Glassnode</div><div class="mc-trend" id="t-lthloss"></div></div>
             </div>
             <div class="mg4" style="margin-bottom:10px;">
               <div class="mc g"><div class="mc-lbl">STH Realized Price</div><div class="mc-val g">~$<span id="sthRp">68,000</span></div><div class="mc-sub">STH cost basis · <span id="sthRpNote">price above it</span></div></div>
@@ -552,12 +552,12 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
             <div style="font-size:8px;color:var(--d2);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">Signal Scorecard</div>
             <table class="tbl">
               <tbody>
-                <tr><td>MVRV 1.46 — Near Buy-Zone Ceiling</td><td style="color:var(--d1);font-size:9px;">Holding ~1.46 as price consolidates ~$78k · still just under the 1.5 ceiling but firmly out of the deep-value zone that fired in June</td><td style="text-align:right;"><span class="bdg a">Neutral (rich)</span></td></tr>
+                <tr><td>MVRV <span id="scMvrvVal">1.52</span> — <span id="scMvrvZone">Above Buy Ceiling</span></td><td style="color:var(--d1);font-size:9px;"><span id="scMvrvNote">Above the 1.5 buy-zone ceiling — the deep-value window that fired in June has closed</span></td><td style="text-align:right;"><span class="bdg a" id="scMvrvBadge">Neutral (rich)</span></td></tr>
                 <tr><td>LTH Supply near cycle peak</td><td style="color:var(--d1);font-size:9px;">Accumulating, not distributing</td><td style="text-align:right;"><span class="bdg g">Bullish</span></td></tr>
                 <tr><td>Exchange reserves 6-year lows</td><td style="color:var(--d1);font-size:9px;">Supply squeeze structural</td><td style="text-align:right;"><span class="bdg g">Bullish</span></td></tr>
                 <tr><td>Lost BTC ~3.7M (18% of supply)</td><td style="color:var(--d1);font-size:9px;">True float ~16M coins</td><td style="text-align:right;"><span class="bdg g">Bullish</span></td></tr>
-                <tr><td>Post-halving timing (<span class="post-halving-month">Month 12</span>)</td><td style="color:var(--d1);font-size:9px;">In Apr–Oct 2026 peak window</td><td style="text-align:right;"><span class="bdg g">Bullish</span></td></tr>
-                <tr><td>LTH losses $200M/day</td><td style="color:var(--d1);font-size:9px;">Need &lt;$25M for exhaustion</td><td style="text-align:right;"><span class="bdg a">Watch</span></td></tr>
+                <tr><td>Post-halving timing (<span class="post-halving-month">Month 28</span>)</td><td style="color:var(--d1);font-size:9px;">Well PAST the 12–18mo peak window — ATH already printed at month 17 (Oct 2025, $126k) · historically the post-peak phase</td><td style="text-align:right;"><span class="bdg r">Headwind</span></td></tr>
+                <tr><td>LTH losses — unverified</td><td style="color:var(--d1);font-size:9px;">Was $200M/day in the June capitulation · at $80k LTHs are mostly in profit so losses should be minimal now — needs fresh Glassnode read</td><td style="text-align:right;"><span class="bdg a">Re-verify</span></td></tr>
                 <tr><td>Geopolitical / oil ~$90 (RE-ESCALATED)</td><td style="color:var(--d1);font-size:9px;">Strait of Hormuz tension flared again · Brent ~$98, WTI ~$90 — back above the $85 threshold · risk-off for BTC and a margin squeeze for miners via power costs</td><td style="text-align:right;"><span class="bdg r">Not cleared</span></td></tr>
               </tbody>
             </table>
@@ -944,7 +944,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
                 <tr><td>Hash Price</td><td style="color:var(--d1);">≤$28/PH/day capitulation</td><td style="color:var(--a);font-weight:600;">~$35 (bottomed $28)</td><td><span class="bdg a">Fired · lifting</span></td><td class="rv">+195%</td></tr>
                 <tr><td>LTH Losses</td><td style="color:var(--d1);">&lt;$25M/day exhaustion</td><td style="color:var(--g);font-weight:600;">Low</td><td><span class="bdg g">Exhausted</span></td><td class="rv">+380%</td></tr>
                 <tr><td>Price vs LTH Realized ($52,900)</td><td style="color:var(--d1);">Price ≈ realized price</td><td style="color:var(--a);font-weight:600;">1.36× above</td><td><span class="bdg a">Rising above</span></td><td class="rv">+428%</td></tr>
-                <tr><td>Post-Halving Timing</td><td style="color:var(--d1);">Month 12–18 post-halving</td><td style="color:var(--a);font-weight:600;"><span class="post-halving-month">Month 14</span></td><td><span class="bdg a">Late window</span></td><td style="color:var(--d1);">Peak historically here</td></tr>
+                <tr><td>Post-Halving Timing</td><td style="color:var(--d1);">Peak window = month 12–18</td><td style="color:var(--r);font-weight:600;"><span class="post-halving-month">Month 28</span></td><td><span class="bdg r">Past peak window</span></td><td style="color:var(--d1);">ATH was month 17 (Oct 2025) · now post-peak phase</td></tr>
                 <tr><td>ETF Flows</td><td style="color:var(--d1);">No baseline (Jan 2024 launch)</td><td style="color:var(--a);font-weight:600;">Aug $3.52B, Sept -ve</td><td><span class="bdg a">Cooling</span></td><td style="color:var(--d1);">Best month of 2026, but streak broke Aug 28</td></tr>
                 <tr><td>LTH / Whale Accumulation</td><td style="color:var(--d1);">Net position change &gt; 0 = accum</td><td style="color:var(--a);font-weight:600;">+33k (Aug 23, aging)</td><td><span class="bdg a">Stale — re-verify</span></td><td style="color:var(--d1);">Was accumulating pre-rally · may flip to distribution at $78k</td></tr>
                 <tr><td>Geopolitical / Oil</td><td style="color:var(--d1);">Oil &lt; $85 = signal cleared</td><td style="color:var(--r);font-weight:600;">~$90 — NOT cleared</td><td><span class="bdg r">Flipped OFF</span></td><td style="color:var(--d1);">Hormuz tension back · Brent $98 · risk-off + miner cost</td></tr>
@@ -954,7 +954,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
                 <tr><td>STH MVRV</td><td style="color:var(--d1);">Cross above 1.0 = bull confirm</td><td style="color:var(--g);font-weight:600;">~1.14 ✓ HELD</td><td><span class="bdg g">Bull confirm</span></td><td style="color:var(--d1);">STHs in profit · structure intact but momentum stalling</td></tr>
               </tbody>
             </table>
-            <div class="caveat" style="margin-top:10px;"><strong>Bottom line (<span class="lu"></span>):</strong> <span style="color:var(--a);">A confirmed recovery running into a wall of macro headwinds.</span> The bull case strengthened where it counts: MSTR restarted buying (+4,603 BTC / $370M — the flywheel-restart signal fired), August ETF inflows were the best of 2026 ($3.52B), the treasury is back in profit, and STHs remain in profit. <span style="color:var(--r);">But three things turned against price in early September:</span> oil is back above $85 (Hormuz tension — that checklist item flipped OFF), the market is pricing a 54-68% chance of a September Fed rate HIKE, and ETF flows went volatile/negative after Aug 28. BTC keeps rejecting $79k. Meanwhile the value case is gone: MVRV 1.46, F&G Greed 65 — the opposite of June's deep-value setup. <span style="color:var(--d1);">Honesty note:</span> the OG-holder on-chain reads (LTH-SOPR, net position) have aged past freshness and are flagged stale — the last verified data was accumulative but pre-rally, and likely shifted toward profit-taking as price rose. Key levels: accept above $79-80k = leg toward $82.7k; lose $76k then $71-72k = rally fades. Rules-based plan: still a HOLD-and-watch zone — you don't chase Greed into resistance with rising macro risk. Today's jobs report is the swing factor.</div>
+            <div class="caveat" style="margin-top:10px;"><strong>Bottom line (<span class="lu"></span>):</strong> <span style="color:var(--a);">A confirmed recovery running into a wall of macro headwinds.</span> The bull case strengthened where it counts: MSTR restarted buying (+4,603 BTC / $370M — the flywheel-restart signal fired), August ETF inflows were the best of 2026 ($3.52B), the treasury is back in profit, and STHs remain in profit. <span style="color:var(--r);">But three things turned against price in early September:</span> oil is back above $85 (Hormuz tension — that checklist item flipped OFF), the market is pricing a 54-68% chance of a September Fed rate HIKE, and ETF flows went volatile/negative after Aug 28. BTC keeps rejecting $79k. Meanwhile the value case is gone: MVRV ~1.52 (above the 1.5 buy ceiling), F&G Greed 65 — the opposite of June's deep-value setup. <span style="color:var(--d1);">Honesty note:</span> the OG-holder on-chain reads (LTH-SOPR, net position) have aged past freshness and are flagged stale — the last verified data was accumulative but pre-rally, and likely shifted toward profit-taking as price rose. Key levels: accept above $79-80k = leg toward $82.7k; lose $76k then $71-72k = rally fades. Rules-based plan: still a HOLD-and-watch zone — you don't chase Greed into resistance with rising macro risk. Today's jobs report is the swing factor.</div>
           </div>
 
           <!-- LIVE ENTRY TRACKER -->
@@ -1061,7 +1061,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
               <div class="tl-item"><div class="tl-dot g"></div><div class="tl-date">Nov–Dec 2018 · BTC ~$3,200–3,500</div><div class="tl-ttl">Event #2 — ICO Bubble Collapse Bottom</div><div style="margin:5px 0;"><span class="sb-mv">MVRV 0.70</span><span class="sb-hs">Hashrate −30%</span><span class="sb-lt">LTH losses peak</span><span class="sb-ex">Exchange reserves low</span></div><div class="tl-body">MVRV 0.70 — entire network below aggregate cost basis. BTC/BCH hash war accelerated capitulation. Most well-documented accumulation event. Bottom Dec 15 2018 at $3,122.</div><div class="tl-rets"><span class="tl-ret r">90d: −10%</span><span class="tl-ret g">180d: +100%</span><span class="tl-ret g">12m: +245%</span><span class="tl-ret g">18m: +485%</span></div></div>
               <div class="tl-item"><div class="tl-dot g"></div><div class="tl-date">Mar 12–20, 2020 · BTC ~$3,800–5,800</div><div class="tl-ttl">Event #3 — COVID Crash</div><div style="margin:5px 0;"><span class="sb-mv">MVRV 0.88</span><span class="sb-hs">Miner cap</span><span class="sb-lt">SOPR &lt;1.0</span><span class="sb-ex">Exchange inflow reversal</span></div><div class="tl-body">BTC fell 60% in 48 hours. Signal lasted ~1 week — most retail missed it. Halving was 2 months away. Best single entry in modern Bitcoin history.</div><div class="tl-rets"><span class="tl-ret g">90d: +145%</span><span class="tl-ret g">180d: +290%</span><span class="tl-ret g">12m: +540%</span><span class="tl-ret g">18m: +1,100%</span></div></div>
               <div class="tl-item"><div class="tl-dot g"></div><div class="tl-date">Nov–Dec 2022 · BTC ~$15,500–18,000</div><div class="tl-ttl">Event #4 — FTX Collapse Bottom</div><div style="margin:5px 0;"><span class="sb-mv">MVRV 0.76</span><span class="sb-hs">Hashrate −20%</span><span class="sb-lt">LTH losses record</span><span class="sb-ex">Exchange reserves 5yr low</span></div><div class="tl-body">MVRV 0.76. Whales losing $337M/day. Hash rate −20%. Exchange reserves 5-year lows. Classic capitulation: last sellers gave up. Bottom Nov 21 2022 at $15,476.</div><div class="tl-rets"><span class="tl-ret a">90d: +50%</span><span class="tl-ret g">180d: +140%</span><span class="tl-ret g">12m: +210%</span><span class="tl-ret g">18m: +480%</span></div></div>
-              <div class="tl-item"><div class="tl-dot a"></div><div class="tl-date">April 2026 — Current</div><div class="tl-ttl" style="color:var(--a);">Improving setup — not yet a convergence event</div><div class="tl-body">MVRV 1.43 (accumulation zone ✓), hash price $37 (approaching $28 floor), LTH losses $200M/day (elevated but easing), OG holders shifting from distribution → accumulation, ETF inflows running 4 consecutive weeks ($824M last week). Missing: LTH loss exhaustion, hash price capitulation, MVRV sub-1.0. A drop to $55–65k would likely trigger full multi-signal convergence.</div></div>
+              <div class="tl-item"><div class="tl-dot a"></div><div class="tl-date">Sept 2026 — Current</div><div class="tl-ttl" style="color:var(--a);">Post-capitulation recovery — signal fired in June, now spent</div><div class="tl-body">The multi-signal convergence DID fire in June ($58-62k, MVRV 1.16, hash price at the $28 floor). BTC has since recovered ~35% to the low-$80s. Now: MVRV ~1.52 (above the buy ceiling), F&G Greed 65, MSTR resumed buying, but oil back above $85 and Fed-hike risk rising. The value entry is closed — this is post-peak-window territory (month 28), not a fresh accumulation setup. Next convergence would need a real pullback toward $60-65k.</div></div>
             </div>
           </div>
         </div>
@@ -1922,6 +1922,33 @@ function updateLiveMvrv() {
         marker.style.background = bg;
         marker.style.color = col;
         marker.style.outline = '1.5px solid ' + oc;
+      }
+
+      // Signal-scorecard MVRV row — track live too
+      if(el('scMvrvVal')) el('scMvrvVal').textContent = mvrvR;
+      const zoneEl = el('scMvrvZone'), noteEl = el('scMvrvNote'), badgeEl = el('scMvrvBadge');
+      if(zoneEl && noteEl && badgeEl) {
+        if(mvrv < 1.0) {
+          zoneEl.textContent = 'Deep Value';
+          noteEl.textContent = 'Below network cost basis — historically a generational accumulation zone';
+          badgeEl.textContent = 'Strong Buy'; badgeEl.className = 'bdg g';
+        } else if(mvrv < 1.5) {
+          zoneEl.textContent = 'In Buy Zone';
+          noteEl.textContent = 'Below the 1.5 buy-zone ceiling — accumulation range intact';
+          badgeEl.textContent = 'Bullish'; badgeEl.className = 'bdg g';
+        } else if(mvrv < 2.5) {
+          zoneEl.textContent = 'Above Buy Ceiling';
+          noteEl.textContent = 'Above the 1.5 buy-zone ceiling — the deep-value window that fired in June has closed';
+          badgeEl.textContent = 'Neutral (rich)'; badgeEl.className = 'bdg a';
+        } else if(mvrv < 3.5) {
+          zoneEl.textContent = 'Distribution Zone';
+          noteEl.textContent = 'Elevated — historically the zone where cycle distribution begins';
+          badgeEl.textContent = 'Caution'; badgeEl.className = 'bdg r';
+        } else {
+          zoneEl.textContent = 'Sell Zone';
+          noteEl.textContent = 'Extreme — prior cycle tops printed here';
+          badgeEl.textContent = 'Sell Risk'; badgeEl.className = 'bdg r';
+        }
       }
     }
   }
