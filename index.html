@@ -404,7 +404,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
         </div>
         <div class="score-meta">
           <div class="score-verdict" id="scoreVerdict" style="color:var(--g);">Accumulation Zone</div>
-          <div class="score-desc">Consolidating ~$78k after +25% August (best month since Nov 2024). MSTR RESUMED buying (+4,603 BTC, flywheel restart). But momentum stalled at $79k · oil back above $85 (Hormuz) flips that signal OFF · Fed HIKE bets rising. MVRV 1.46, F&amp;G Greed 65 — rich, not a value entry.</div>
+          <div class="score-desc">Consolidating in the low-$80s after +25% August (best month since Nov 2024). MSTR RESUMED buying (+4,603 BTC) — but at ~1.0x mNAV, parity accumulation, not the accretive flywheel. Momentum stalling at $79-80k · oil back above $85 (Hormuz) flipped that signal OFF · Fed HIKE bets rising. MVRV <span id="descMvrv">1.52</span>, F&amp;G Greed 65 — value gone, not an accumulation entry.</div>
           <div class="verdict-tag" id="scoreTag" style="background:var(--gd);color:var(--g);border-color:rgba(39,174,96,0.3);">▲ Upgraded Signal</div>
         </div>
       </div>
@@ -1422,7 +1422,14 @@ function updateHeadlineScore(hits, near, whaleDelta) {
   const raw = 5 + hits + (closeOnly * 0.5) + whaleDelta;
   const score = Math.max(1, Math.min(10, Math.round(raw)));
 
-  // Color + verdict thresholds
+  // Read live MVRV so the verdict LABEL reflects valuation, not just signal count.
+  // The score measures signal convergence; the label is a valuation claim —
+  // don't say "Accumulation Zone" when MVRV is above the <1.5 buy band.
+  let mvrv = NaN;
+  const mvEl = document.getElementById('e-mvrv');
+  if(mvEl) mvrv = parseFloat(mvEl.value);
+
+  // Color + verdict thresholds (score-driven)
   let color, verdict, tagBg, tagBorder, tagTxt;
   if(score >= 8) {
     color = 'var(--g)'; verdict = 'Strong Buy Zone';
@@ -1441,6 +1448,21 @@ function updateHeadlineScore(hits, near, whaleDelta) {
     tagBg = 'var(--rd)'; tagBorder = 'rgba(231,76,60,0.3)'; tagTxt = '▼ Sell Pressure';
   }
 
+  // Valuation override: MVRV above the 1.5 buy-zone ceiling can't be called
+  // "accumulation." Downgrade the label (not the score) to reflect that the
+  // value entry is gone, even if signal convergence is still constructive.
+  if(!isNaN(mvrv) && mvrv >= 1.5 && score >= 6) {
+    verdict = 'Bullish — But Rich';
+    tagTxt = '◆ Trend Up, Value Gone';
+    color = 'var(--a)';
+    tagBg = 'var(--ad)'; tagBorder = 'rgba(230,126,34,0.3)';
+  } else if(!isNaN(mvrv) && mvrv >= 2.5 && score >= 4) {
+    verdict = 'Distribution Risk';
+    tagTxt = '▼ Rich — Trim Zone';
+    color = 'var(--r)';
+    tagBg = 'var(--rd)'; tagBorder = 'rgba(231,76,60,0.3)';
+  }
+
   // Update DOM
   const numEl = document.getElementById('scoreNum');
   const mobEl = document.getElementById('mobScore');
@@ -1457,12 +1479,16 @@ function updateHeadlineScore(hits, near, whaleDelta) {
     tagEl.style.color = color;
     tagEl.style.borderColor = tagBorder;
   }
+  // Mirror live MVRV into the score-desc blurb so it never drifts
+  const descMvrv = document.getElementById('descMvrv');
+  if(descMvrv && !isNaN(mvrv)) descMvrv.textContent = mvrv.toFixed(2);
+
   // SVG arc: circumference = 2*pi*r = 2*pi*23 ≈ 144.51
   // dashoffset = circumference * (1 - score/10)
   if(arcEl) {
     const circ = 144.51;
     arcEl.setAttribute('stroke-dashoffset', (circ * (1 - score/10)).toFixed(2));
-    arcEl.setAttribute('stroke', score >= 6 ? '#27ae60' : score >= 4 ? '#e67e22' : '#e74c3c');
+    arcEl.setAttribute('stroke', color === 'var(--g)' ? '#27ae60' : color === 'var(--a)' ? '#e67e22' : '#e74c3c');
   }
 }
 
