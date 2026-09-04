@@ -511,14 +511,14 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
           </div>
           <div class="sec-body">
             <div class="mg4">
-              <div class="mc g"><div class="mc-lbl">MVRV Ratio</div><div class="mc-val g"><input class="e" id="e-mvrv" value="1.46" data-fetched="2026-09-04"/></div><div class="mc-sub">Sell&gt;3.7 · Buy&lt;1 · Source: Bitbo</div><div class="mc-trend" id="t-mvrv"></div></div>
+              <div class="mc g"><div class="mc-lbl">MVRV Ratio</div><div class="mc-val g"><span id="mvrvLive">1.52</span><input type="hidden" id="e-mvrv" value="1.52" data-fetched="2026-09-04"/></div><div class="mc-sub">Live: price ÷ realized · Sell&gt;3.7 · Buy&lt;1</div><div class="mc-trend" id="t-mvrv"></div></div>
               <div class="mc g"><div class="mc-lbl">LTH Supply</div><div class="mc-val g"><input class="e" id="e-lth" value="~8.05M" data-fetched="2026-09-04"/></div><div class="mc-sub">Near cycle high · Glassnode</div><div class="mc-trend" id="t-lth"></div></div>
               <div class="mc g"><div class="mc-lbl">Realized Price</div><div class="mc-val g"><input class="e" id="e-rp" value="$53,200" data-fetched="2026-09-04"/></div><div class="mc-sub">Live · Bitbo.io <span class="lu"></span></div><div class="mc-trend" id="t-rp"></div></div>
               <div class="mc r"><div class="mc-lbl">LTH Daily Losses</div><div class="mc-val r"><input class="e" id="e-lthloss" value="$200M" data-fetched="estimate"/></div><div class="mc-sub">Target: &lt;$25M/day · Glassnode</div><div class="mc-trend" id="t-lthloss"></div></div>
             </div>
             <div class="mg4" style="margin-bottom:10px;">
-              <div class="mc g"><div class="mc-lbl">STH Realized Price</div><div class="mc-val g">~$68,000</div><div class="mc-sub">STH cost basis · price ~$78k, comfortably above</div></div>
-              <div class="mc g"><div class="mc-lbl">STH MVRV</div><div class="mc-val g">~1.14</div><div class="mc-sub">Above 1.0 — STHs in profit · structure intact but stalling</div></div>
+              <div class="mc g"><div class="mc-lbl">STH Realized Price</div><div class="mc-val g">~$<span id="sthRp">68,000</span></div><div class="mc-sub">STH cost basis · <span id="sthRpNote">price above it</span></div></div>
+              <div class="mc g"><div class="mc-lbl">STH MVRV</div><div class="mc-val g"><span id="sthMvrvLive">~1.19</span></div><div class="mc-sub">Live: price ÷ STH realized · &gt;1.0 = STHs in profit</div></div>
               <div class="mc g"><div class="mc-lbl">Power Law Bottom Band</div><div class="mc-val g">~$62,000</div><div class="mc-sub">Key long-term floor · Bitbo</div></div>
               <div class="mc p"><div class="mc-lbl">BTC / Gold Ratio</div><div class="mc-val p"><input class="e" id="e-btcgold" value="15.55 oz" data-fetched="2026-09-04"/></div><div class="mc-sub">oz of gold per BTC · ATH ~38 oz · Bitbo</div><div class="mc-trend" id="t-btcgold"></div></div>
             </div>
@@ -526,7 +526,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
             <div class="mvrv-bar">
               <div class="mvrv-z" style="width:8%;background:#0e2318;color:#4ade80;font-size:6px;">LOST</div>
               <div class="mvrv-z" style="width:10%;background:#14532d;color:#4ade80;">BUY</div>
-              <div class="mvrv-z" style="width:14%;background:#1a4a2e;color:#86efac;outline:1.5px solid #22c55e;outline-offset:-1px;font-size:8px;">★1.49</div>
+              <div class="mvrv-z" id="mvrvCycleMarker" style="width:14%;background:#1a4a2e;color:#86efac;outline:1.5px solid #22c55e;outline-offset:-1px;font-size:8px;">★1.52</div>
               <div class="mvrv-z" style="width:16%;background:#1e3818;color:#a3e635;">FAIR</div>
               <div class="mvrv-z" style="width:18%;background:#3a2800;color:#fbbf24;">DIST</div>
               <div class="mvrv-z" style="width:20%;background:#391600;color:#fb923c;">DIST+</div>
@@ -1308,6 +1308,7 @@ async function fetchPx() {
     document.getElementById('sbPxTime').textContent = 'Live · ' + ts + ' SGT';
     document.getElementById('footTime').textContent = 'Refreshed ' + ts;
 
+    updateLiveMvrv();
     buildChecklist();
     updateEntryTracker();
     updateDynamicText();
@@ -1859,6 +1860,59 @@ function updateMvrvLevels() {
   if(el('rpForCalc')) el('rpForCalc').textContent = Math.round(rp).toLocaleString('en-US');
 }
 
+// ═══ LIVE MVRV ════════════════════════════════════════════
+// MVRV = live price ÷ realized price (both sourced). Realized price is the
+// stable manual field from Bitbo; live price ticks every fetch. This keeps
+// the ratio faithful to source instead of drifting from a snapshot value.
+function updateLiveMvrv() {
+  if(!lastPx) return;
+  const el = id => document.getElementById(id);
+
+  // Aggregate MVRV from realized price (e-rp)
+  const rpEl = el('e-rp');
+  if(rpEl) {
+    const rp = parseFloat(rpEl.value.replace(/[^0-9.]/g,''));
+    if(!isNaN(rp) && rp > 1000) {
+      const mvrv = lastPx / rp;
+      const mvrvR = mvrv.toFixed(2);
+      // Sync the hidden input so checklist + signal-status logic read the live value
+      const mv = el('e-mvrv');
+      if(mv) mv.value = mvrvR;
+      if(el('mvrvLive')) el('mvrvLive').textContent = mvrvR;
+
+      // Reposition cycle-zone marker along the 0–5 MVRV axis.
+      // Bar segments map to MVRV bands: 0-1 (LOST+BUY, 18%), 1-1.5 (14%),
+      // 1.5-2.5 (16%... using label scale). Marker label shows the value.
+      const marker = el('mvrvCycleMarker');
+      if(marker) {
+        marker.textContent = '★' + mvrvR;
+        // Recolor + reband: <1 buy-deep, 1-1.5 buy, 1.5-2.5 fair, 2.5-3.5 dist, >3.5 sell
+        let bg, col, oc;
+        if(mvrv < 1.0)      { bg='#0e2318'; col='#4ade80'; oc='#16a34a'; }
+        else if(mvrv < 1.5) { bg='#1a4a2e'; col='#86efac'; oc='#22c55e'; }
+        else if(mvrv < 2.5) { bg='#1e3818'; col='#a3e635'; oc='#84cc16'; }
+        else if(mvrv < 3.5) { bg='#3a2800'; col='#fbbf24'; oc='#f59e0b'; }
+        else                { bg='#380d0d'; col='#f87171'; oc='#ef4444'; }
+        marker.style.background = bg;
+        marker.style.color = col;
+        marker.style.outline = '1.5px solid ' + oc;
+      }
+    }
+  }
+
+  // STH MVRV from STH realized price span (sthRp)
+  const sthRpEl = el('sthRp');
+  if(sthRpEl) {
+    const sthRp = parseFloat(sthRpEl.textContent.replace(/[^0-9.]/g,''));
+    if(!isNaN(sthRp) && sthRp > 1000) {
+      const sthMvrv = lastPx / sthRp;
+      if(el('sthMvrvLive')) el('sthMvrvLive').textContent = '~' + sthMvrv.toFixed(2);
+      if(el('sthRpNote')) el('sthRpNote').textContent =
+        lastPx >= sthRp ? 'price above it — STHs in profit' : 'price BELOW it — STHs underwater';
+    }
+  }
+}
+
 // ═══ INIT ═════════════════════════════════════════════════
 const LAST_UPDATED = 'Sep 4 2026';
 const FILE_VERSION = '2026-09-04-v1';
@@ -1886,6 +1940,7 @@ loadData();
 loadSecs();
 updateTrends();
 updateMvrvLevels();
+updateLiveMvrv();
 updateWhaleRegime();
 updateEntryTracker();
 updateDynamicText();
